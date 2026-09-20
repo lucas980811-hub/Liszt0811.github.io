@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>給某位正在生氣的人 💗</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif;
+  background:
+    radial-gradient(circle at 20% 10%,#ffd6e7,transparent 35%),
+    radial-gradient(circle at 90% 90%,#ffc5dc,transparent 35%),
+    #fff1f6;
+  color:#402532;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  overflow-x:hidden;
+}
+
+#app{
+  width:min(680px,100%);
+}
+
+.screen{
+  display:none;
+  text-align:center;
+  animation:appear .5s ease;
+}
+
+.screen.active{
+  display:block;
+}
+
+@keyframes appear{
+  from{
+    opacity:0;
+    transform:translateY(25px) scale(.97);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.emoji{
+  font-size:75px;
+  margin-bottom:5px;
+}
+
+.tiny{
+  font-size:12px;
+  letter-spacing:3px;
+  opacity:.5;
+  font-weight:900;
+}
+
+h1{
+  font-size:clamp(38px,10vw,65px);
+  margin:10px 0 20px;
+}
+
+h2{
+  font-size:clamp(30px,8vw,45px);
+  margin:10px 0 18px;
+}
+
+p{
+  font-size:18px;
+  line-height:1.8;
+}
+
+button{
+  border:0;
+  border-radius:18px;
+  padding:16px 23px;
+  margin:7px;
+  background:white;
+  color:#402532;
+  font-size:17px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 7px 0 #d99aae;
+  transition:.12s;
+}
+
+button:active{
+  transform:translateY(5px);
+  box-shadow:0 2px 0 #d99aae;
+}
+
+.mainBtn{
+  background:#ff5f8a;
+  color:white;
+  box-shadow:0 7px 0 #bd3459;
+}
+
+.card,
+.letter{
+  background:rgba(255,255,255,.8);
+  border:2px solid white;
+  box-shadow:0 18px 50px rgba(150,50,90,.12);
+  border-radius:25px;
+  padding:25px;
+  margin:25px 0;
+}
+
+.warning{
+  display:grid;
+  gap:10px;
+}
+
+.meter{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+}
+
+.meter i{
+  width:40px;
+  height:12px;
+  border-radius:20px;
+  background:#ff668f;
+}
+
+.meter i:last-child{
+  background:#ff294f;
+}
+
+.choices,
+.quiz{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.choices button,
+.quiz button{
+  margin:0;
+}
+
+#feedback,
+#quizFeedback{
+  min-height:35px;
+  font-weight:800;
+  color:#d93465;
+}
+
+.score{
+  font-size:21px;
+  margin:18px;
+}
+
+#arena{
+  height:310px;
+  position:relative;
+  overflow:hidden;
+  border:3px dashed #ef9db8;
+  border-radius:25px;
+  background:rgba(255,255,255,.7);
+}
+
+#sorry{
+  position:absolute;
+  background:#ff5f8a;
+  color:white;
+  box-shadow:0 7px 0 #bd3459;
+  margin:0;
+}
+
+.letter{
+  text-align:left;
+}
+
+.letter .big{
+  text-align:center;
+  font-size:32px;
+  color:#e83d70;
+  font-weight:1000;
+}
+
+.big{
+  font-size:26px;
+  font-weight:900;
+}
+
+.bar{
+  height:25px;
+  background:#ead5dd;
+  border-radius:99px;
+  overflow:hidden;
+  margin:20px 0;
+}
+
+.bar i{
+  display:block;
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#ff7aa3,#e83d70);
+  transition:2s;
+}
+
+.heart{
+  position:fixed;
+  top:-50px;
+  pointer-events:none;
+  animation:fall linear forwards;
+  z-index:999;
+}
+
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(600deg);
+    opacity:0;
+  }
+}
+
+@media(max-width:560px){
+  .choices,
+  .quiz{
+    grid-template-columns:1fr;
+  }
+
+  p{
+    font-size:16px;
+  }
+
+  #arena{
+    height:280px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<!-- 第一頁 -->
+<section class="screen active" id="s0">
+
+  <div class="emoji">🚨</div>
+
+  <div class="tiny">
+    IMPORTANT SYSTEM NOTICE
+  </div>
+
+  <h1>女朋友生氣了。</h1>
+
+  <p>
+    本網站偵測到一名男友<br>
+    疑似犯下嚴重錯誤。
+  </p>
+
+  <div class="card warning">
+
+    <b>危險程度</b>
+
+    <div class="meter">
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+      <i></i>
+    </div>
+
+    <small>
+      極度危險（建議立刻道歉）
+    </small>
+
+  </div>
+
+  <button class="mainBtn" onclick="go(1)">
+    開始搶救男友 →
+  </button>
+
+</section>
+
+
+<!-- 第二頁 -->
+<section class="screen" id="s1">
+
+  <div class="tiny">
+    CASE #5201314
+  </div>
+
+  <h2>第一關：禁止狡辯</h2>
+
+  <p>
+    請選擇男友目前最正確的應對方式。
+  </p>
+
+  <div class="choices">
+
+    <button onclick="wrong(this)">
+      「可是妳也……」
+    </button>
+
+    <button onclick="wrong(this)">
+      「我哪有那麼嚴重」
+    </button>
+
+    <button onclick="wrong(this)">
+      「好啦對不起不就好了」
+    </button>
+
+    <button class="mainBtn" onclick="go(2)">
+      「對不起，是我錯了。」
+    </button>
+
+  </div>
+
+  <p id="feedback"></p>
+
+</section>
+
+
+<!-- 第三頁 -->
+<section class="screen" id="s2">
+
+  <div class="tiny">
+    MINIGAME 01
+  </div>
+
+  <h2>抓住逃跑的道歉</h2>
+
+  <p>
+    點到「對不起」10 次。<br>
+    它會逃跑，因為這個男友很欠揍。
+  </p>
+
+  <div class="score">
+    進度：
+    <b id="score">0</b>
+    / 10
+  </div>
+
+  <div id="arena">
+
+    <button id="sorry" onclick="catchSorry()">
+      對不起
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- 第四頁 -->
+<section class="screen" id="s3">
+
+  <div class="tiny">
+    MINIGAME 02
+  </div>
+
+  <h2>女友生存測驗</h2>
+
+  <p>
+    以下哪個答案最接近宇宙真理？
+  </p>
+
+  <div class="quiz">
+
+    <button onclick="quiz(this,false)">
+      男友永遠是對的
+    </button>
+
+    <button onclick="quiz(this,false)">
+      誰生氣誰先道歉
+    </button>
+
+    <button onclick="quiz(this,true)">
+      女友是對的（至少現在是）
+    </button>
+
+    <button onclick="quiz(this,false)">
+      這題可以不回答
+    </button>
+
+  </div>
+
+  <p id="quizFeedback"></p>
+
+</section>
+
+
+<!-- 第五頁 -->
+<section class="screen" id="s4">
+
+  <div class="emoji">
+    💌
+  </div>
+
+  <div class="tiny">
+    FINAL BOSS
+  </div>
+
+  <h2>正式道歉</h2>
+
+  <div class="letter">
+
+    <p>
+      好啦，前面都是我在耍白痴。
+    </p>
+
+    <p>
+      但這裡是真的。
+    </p>
+
+    <p>
+      <strong>對不起。</strong>
+    </p>
+
+    <p>
+      我知道有些事情不是一句「對不起」
+      就可以直接當作沒發生過。
+    </p>
+
+    <p>
+      所以我不想只是隨便丟一句對不起給妳，
+      然後假裝事情結束。
+    </p>
+
+    <p>
+      我是真的有在想，
+      自己到底哪裡做錯了。
+    </p>
+
+    <p>
+      我希望妳知道，
+      我很在乎妳，也很在乎我們。
+    </p>
+
+    <p>
+      所以……
+    </p>
+
+    <p class="big">
+      對不起啦 🥺
+    </p>
+
+    <p style="text-align:center">
+      —— 這個笨蛋男友
+    </p>
+
+  </div>
+
+  <button class="mainBtn" onclick="go(5)">
+    我可以接受這份道歉 →
+  </button>
+
+</section>
+
+
+<!-- 最後 -->
+<section class="screen" id="s5">
+
+  <div class="emoji">
+    🎉
+  </div>
+
+  <h1>
+    系統判定完成！
+  </h1>
+
+  <p class="big">
+    女友原諒度：
+    <span id="percent">0</span>%
+  </p>
+
+  <div class="bar">
+    <i id="bar"></i>
+  </div>
+
+  <p id="finalText">
+    正在分析女友心情……
+  </p>
+
+  <button class="mainBtn" onclick="celebrate()">
+    確認原諒 💗
+  </button>
+
+  <p class="tiny">
+    ※ 本系統不保證真的能換到抱抱。<br>
+    請自行努力。
+  </p>
+
+</section>
+
+</div>
+
+
+<script>
+
+let current = 0;
+let score = 0;
+
+const screens =
+document.querySelectorAll(".screen");
+
+
+function go(n){
+
+  screens[current].classList.remove("active");
+
+  current = n;
+
+  screens[current].classList.add("active");
+
+  if(n === 2){
+    resetGame();
+  }
+
+}
+
+
+function wrong(button){
+
+  const messages = [
+
+    "⚠️ 危險發言！",
+
+    "❌ 好，直接加重刑期。",
+
+    "🚨 道歉不是這樣道的！",
+
+    "💀 男友存活率 -20%",
+
+    "🙃 你到底會不會道歉？"
+
+  ];
+
+  button.innerText =
+  messages[Math.floor(Math.random()*messages.length)];
+
+  button.animate(
+    [
+      {transform:"translateX(-8px)"},
+      {transform:"translateX(8px)"},
+      {transform:"translateX(-5px)"},
+      {transform:"none"}
+    ],
+    300
+  );
+
+}
+
+
+function resetGame(){
+
+  score = 0;
+
+  document.getElementById("score").innerText = score;
+
+  moveSorry();
+
+}
+
+
+function moveSorry(){
+
+  const b =
+  document.getElementById("sorry");
+
+  b.style.left =
+  (5 + Math.random()*78) + "%";
+
+  b.style.top =
+  (5 + Math.random()*75) + "%";
+
+}
+
+
+function catchSorry(){
+
+  score++;
+
+  document.getElementById("score").innerText = score;
+
+  if(score >= 10){
+
+    setTimeout(()=>{
+      go(3);
+    },400);
+
+  }else{
+
+    moveSorry();
+
+  }
+
+}
+
+
+function quiz(button,correct){
+
+  const feedback =
+  document.getElementById("quizFeedback");
+
+  if(correct){
+
+    feedback.innerText =
+    "✓ 正確。你成功掌握了人類社會最重要的生存知識。";
+
+    setTimeout(()=>{
+      go(4);
+    },1000);
+
+  }else{
+
+    feedback.innerText =
+    "❌ 錯誤。男友的存活率正在下降。";
+
+    button.animate(
+      [
+        {transform:"rotate(-3deg)"},
+        {transform:"rotate(3deg)"},
+        {transform:"none"}
+      ],
+      200
+    );
+
+  }
+
+}
+
+
+function celebrate(){
+
+  document.getElementById("percent").innerText = "100";
+
+  document.getElementById("bar").style.width = "100%";
+
+  document.getElementById("finalText").innerText =
+  "系統：恭喜。現在請放下手機，去跟她好好說話。❤️";
+
+  for(let i=0;i<45;i++){
+
+    const heart =
+    document.createElement("div");
+
+    heart.className = "heart";
+
+    heart.innerText =
+    ["💗","💕","✨","🌸","💖"][Math.floor(Math.random()*5)];
+
+    heart.style.left =
+    Math.random()*100 + "vw";
+
+    heart.style.fontSize =
+    (18 + Math.random()*30) + "px";
+
+    heart.style.animationDuration =
+    (2 + Math.random()*2) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(()=>{
+      heart.remove();
+    },4500);
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
