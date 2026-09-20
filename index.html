@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>道歉物理大挑戰</title>
+<title>給莊小胖的道歉小遊戲</title>
 <style>
 *{box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overflow:hidden;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;background:linear-gradient(160deg,#ffd1dc,#c9b6ff);color:#3a2140}
 .scr{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
 .scr.on{display:flex}
-h1{font-size:2rem;margin:.2em 0}
+h1{font-size:1.8rem;margin:.2em 0}
 p{font-size:1.05rem;line-height:1.6;max-width:520px}
 button{font-size:1.1rem;padding:.8em 1.4em;border:0;border-radius:999px;background:#ff5c8a;color:#fff;font-weight:700;box-shadow:0 6px 0 #c23a64;cursor:pointer;margin:6px}
 button:active{transform:translateY(4px);box-shadow:0 2px 0 #c23a64}
@@ -31,7 +31,7 @@ button:active{transform:translateY(4px);box-shadow:0 2px 0 #c23a64}
 
 <section class="scr on" id="s0">
   <div style="font-size:4rem">🥺</div>
-  <h1>道歉物理大挑戰</h1>
+  <h1>給莊小胖的道歉小遊戲</h1>
   <p>致 <b id="nm"></b>：<br>本人因「退追蹤」「移除粉絲」與「嘲諷物理很簡單」等罪行，<br>特別開發此遊戲，請你親自制裁我。</p>
   <button onclick="start1()">開始制裁 ▶</button>
 </section>
@@ -62,7 +62,7 @@ button:active{transform:translateY(4px);box-shadow:0 2px 0 #c23a64}
 </section>
 
 <script>
-const NAME="寶貝", ME="笨蛋男友";   // ← 改成她的名字和你的自稱
+const NAME="莊小胖", ME="笨蛋男友";   // ← 可改成你的自稱
 const $=s=>document.querySelector(s);
 let stage=0;
 $('#nm').textContent=NAME;
@@ -98,22 +98,32 @@ function loop1(){
   requestAnimationFrame(loop1);
 }
 
-/* ---------- 關卡 2：平底鍋砸小丑（拋體運動，物理超簡單對吧？） ---------- */
+/* ---------- 關卡 2：平底鍋砸小丑（已修正：發射點內移、可從任意位置拖曳） ---------- */
 const cv=$('#cv'),g=cv.getContext('2d');
-let W,H,C,T,ball=null,drag=null,hits=0,shk=0;
+let W,H,C,T,ball=null,start=null,cur=null,hits=0,shk=0;
+const GRAV=.25, K=.12, VMAX=24, HITR=55;
 const HIT=["砰！這是「說物理很簡單」的份 🍳","砰！這是「退追蹤」的份 💥","砰！這是「移除粉絲」的份 😤"];
-const MISS=["偏了～原來拋體運動也沒那麼簡單 😏","力道不夠，再拉遠一點 💪","小丑閃開了 🤡💨"];
-function newT(){T={x:W*.45+Math.random()*W*.45,y:H*.25+Math.random()*H*.6};}
-function start2(){show(2);W=cv.width=innerWidth;H=cv.height=innerHeight-90;C={x:55,y:H-55};hits=0;ball=null;newT();
-  $('#t2').textContent="向後拖曳再放開，用平底鍋砸中 🤡 三次！";loop2();}
+const MISS=["偏了～原來拋體運動也沒那麼簡單 😏","再調整一下角度 💪","小丑閃開了 🤡💨"];
+function newT(){T={x:W*.45+Math.random()*W*.4,y:H*.2+Math.random()*H*.5};}
+function start2(){
+  show(2);W=cv.width=innerWidth;H=cv.height=innerHeight-90;
+  C={x:Math.max(90,W*.2),y:H*.72};
+  hits=0;ball=null;start=null;cur=null;newT();
+  $('#t2').textContent="在畫面任何地方按住、往後拉再放開，用平底鍋砸中 🤡 三次！";
+  loop2();
+}
 function pos(e){const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
-function vel(){let a=(C.x-drag.x)*.13,b=(C.y-drag.y)*.13;const s=Math.hypot(a,b);if(s>24){a*=24/s;b*=24/s}return[a,b]}
-cv.addEventListener('pointerdown',e=>{if(!ball)drag=pos(e)});
-cv.addEventListener('pointermove',e=>{if(drag)drag=pos(e)});
+function vel(){
+  let a=(start.x-cur.x)*K,b=(start.y-cur.y)*K;
+  const s=Math.hypot(a,b);if(s>VMAX){a*=VMAX/s;b*=VMAX/s}
+  return[a,b];
+}
+cv.addEventListener('pointerdown',e=>{if(!ball){start=pos(e);cur=start}});
+cv.addEventListener('pointermove',e=>{if(start)cur=pos(e)});
 cv.addEventListener('pointerup',()=>{
-  if(!drag||ball)return;
-  const[a,b]=vel();drag=null;
-  if(Math.hypot(a,b)>3)ball={x:C.x,y:C.y,vx:a,vy:b};
+  if(!start||ball)return;
+  const[a,b]=vel();start=cur=null;
+  if(Math.hypot(a,b)>2)ball={x:C.x,y:C.y,vx:a,vy:b};
 });
 function loop2(){
   if(stage!==2)return;
@@ -121,20 +131,26 @@ function loop2(){
   g.font="40px serif";g.textAlign="center";g.textBaseline="middle";
   g.fillStyle="#0002";g.fillRect(0,H-6,W,6);
   g.fillText("😤",C.x,C.y);
-  if(drag){ // 軌跡預覽
+  if(start){ // 拖曳線 + 軌跡預覽
+    g.strokeStyle="#ffffff88";g.lineWidth=3;g.beginPath();g.moveTo(start.x,start.y);g.lineTo(cur.x,cur.y);g.stroke();
     let[a,b]=vel(),x=C.x,y=C.y;g.fillStyle="#fff";
-    for(let i=0;i<40;i++){x+=a;y+=b;b+=.3;if(i%3==0){g.beginPath();g.arc(x,y,3,0,7);g.fill()}}
+    for(let i=0;i<70;i++){x+=a;y+=b;b+=GRAV;if(i%3==0){g.beginPath();g.arc(x,y,3,0,7);g.fill()}}
   }
   const sx=shk>0?(Math.random()-.5)*14:0;if(shk>0)shk--;
   g.fillText("🤡",T.x+sx,T.y);
   if(ball){
-    ball.vy+=.3;ball.x+=ball.vx;ball.y+=ball.vy;
-    g.save();g.translate(ball.x,ball.y);g.rotate(ball.x/20);g.fillText("🍳",0,0);g.restore();
-    if(Math.hypot(ball.x-T.x,ball.y-T.y)<42){
-      $('#t2').textContent=HIT[hits];hits++;shk=25;ball=null;
-      if(hits>=3){setTimeout(start3,1200);}else newT();
-    }else if(ball.y>H||ball.x>W+60||ball.x<-60){
-      $('#t2').textContent=MISS[Math.random()*3|0];ball=null;
+    for(let s=0;s<4&&ball;s++){ // 分段偵測，避免穿過小丑
+      ball.vy+=GRAV/4;ball.x+=ball.vx/4;ball.y+=ball.vy/4;
+      if(Math.hypot(ball.x-T.x,ball.y-T.y)<HITR){
+        $('#t2').textContent=HIT[hits];hits++;shk=25;ball=null;
+        if(hits>=3)setTimeout(start3,1200);else newT();
+      }
+    }
+    if(ball){
+      g.save();g.translate(ball.x,ball.y);g.rotate(ball.x/20);g.fillText("🍳",0,0);g.restore();
+      if(ball.y>H+60||ball.x>W+80||ball.x<-80){
+        $('#t2').textContent=MISS[Math.random()*3|0];ball=null;
+      }
     }
   }
   requestAnimationFrame(loop2);
