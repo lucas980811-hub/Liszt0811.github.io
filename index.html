@@ -2,677 +2,197 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>給某位正在生氣的人 💗</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>道歉物理大挑戰</title>
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-body{
-  margin:0;
-  min-height:100vh;
-  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC",sans-serif;
-  background:
-    radial-gradient(circle at 20% 10%,#ffd6e7,transparent 35%),
-    radial-gradient(circle at 90% 90%,#ffc5dc,transparent 35%),
-    #fff1f6;
-  color:#402532;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-  overflow-x:hidden;
-}
-
-#app{
-  width:min(680px,100%);
-}
-
-.screen{
-  display:none;
-  text-align:center;
-  animation:appear .5s ease;
-}
-
-.screen.active{
-  display:block;
-}
-
-@keyframes appear{
-  from{
-    opacity:0;
-    transform:translateY(25px) scale(.97);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-.emoji{
-  font-size:75px;
-  margin-bottom:5px;
-}
-
-.tiny{
-  font-size:12px;
-  letter-spacing:3px;
-  opacity:.5;
-  font-weight:900;
-}
-
-h1{
-  font-size:clamp(38px,10vw,65px);
-  margin:10px 0 20px;
-}
-
-h2{
-  font-size:clamp(30px,8vw,45px);
-  margin:10px 0 18px;
-}
-
-p{
-  font-size:18px;
-  line-height:1.8;
-}
-
-button{
-  border:0;
-  border-radius:18px;
-  padding:16px 23px;
-  margin:7px;
-  background:white;
-  color:#402532;
-  font-size:17px;
-  font-weight:900;
-  cursor:pointer;
-  box-shadow:0 7px 0 #d99aae;
-  transition:.12s;
-}
-
-button:active{
-  transform:translateY(5px);
-  box-shadow:0 2px 0 #d99aae;
-}
-
-.mainBtn{
-  background:#ff5f8a;
-  color:white;
-  box-shadow:0 7px 0 #bd3459;
-}
-
-.card,
-.letter{
-  background:rgba(255,255,255,.8);
-  border:2px solid white;
-  box-shadow:0 18px 50px rgba(150,50,90,.12);
-  border-radius:25px;
-  padding:25px;
-  margin:25px 0;
-}
-
-.warning{
-  display:grid;
-  gap:10px;
-}
-
-.meter{
-  display:flex;
-  justify-content:center;
-  gap:6px;
-}
-
-.meter i{
-  width:40px;
-  height:12px;
-  border-radius:20px;
-  background:#ff668f;
-}
-
-.meter i:last-child{
-  background:#ff294f;
-}
-
-.choices,
-.quiz{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.choices button,
-.quiz button{
-  margin:0;
-}
-
-#feedback,
-#quizFeedback{
-  min-height:35px;
-  font-weight:800;
-  color:#d93465;
-}
-
-.score{
-  font-size:21px;
-  margin:18px;
-}
-
-#arena{
-  height:310px;
-  position:relative;
-  overflow:hidden;
-  border:3px dashed #ef9db8;
-  border-radius:25px;
-  background:rgba(255,255,255,.7);
-}
-
-#sorry{
-  position:absolute;
-  background:#ff5f8a;
-  color:white;
-  box-shadow:0 7px 0 #bd3459;
-  margin:0;
-}
-
-.letter{
-  text-align:left;
-}
-
-.letter .big{
-  text-align:center;
-  font-size:32px;
-  color:#e83d70;
-  font-weight:1000;
-}
-
-.big{
-  font-size:26px;
-  font-weight:900;
-}
-
-.bar{
-  height:25px;
-  background:#ead5dd;
-  border-radius:99px;
-  overflow:hidden;
-  margin:20px 0;
-}
-
-.bar i{
-  display:block;
-  width:0%;
-  height:100%;
-  background:linear-gradient(90deg,#ff7aa3,#e83d70);
-  transition:2s;
-}
-
-.heart{
-  position:fixed;
-  top:-50px;
-  pointer-events:none;
-  animation:fall linear forwards;
-  z-index:999;
-}
-
-@keyframes fall{
-  to{
-    transform:translateY(110vh) rotate(600deg);
-    opacity:0;
-  }
-}
-
-@media(max-width:560px){
-  .choices,
-  .quiz{
-    grid-template-columns:1fr;
-  }
-
-  p{
-    font-size:16px;
-  }
-
-  #arena{
-    height:280px;
-  }
-}
+*{box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;background:linear-gradient(160deg,#ffd1dc,#c9b6ff);color:#3a2140}
+.scr{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.scr.on{display:flex}
+h1{font-size:2rem;margin:.2em 0}
+p{font-size:1.05rem;line-height:1.6;max-width:520px}
+button{font-size:1.1rem;padding:.8em 1.4em;border:0;border-radius:999px;background:#ff5c8a;color:#fff;font-weight:700;box-shadow:0 6px 0 #c23a64;cursor:pointer;margin:6px}
+button:active{transform:translateY(4px);box-shadow:0 2px 0 #c23a64}
+#hud{position:fixed;top:10px;left:0;right:0;text-align:center;font-weight:700;z-index:5}
+#fb{position:absolute;left:0;top:0;z-index:3;white-space:nowrap}
+#cv{display:block;touch-action:none}
+#s2{justify-content:flex-start;padding:0}
+#t2{margin:34px 0 0;height:50px;padding:0 12px}
+.op{display:block;width:min(90vw,420px);background:#fff;color:#3a2140;box-shadow:0 6px 0 #cbb}
+.shake{animation:sh .4s}
+@keyframes sh{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+#letter{white-space:pre-wrap;text-align:left;background:#fffafc;padding:18px;border-radius:16px;box-shadow:0 8px 24px #0002;min-height:260px;max-width:440px;font-size:1rem;line-height:1.7}
+#cf{position:fixed;inset:0;pointer-events:none;z-index:9}
 </style>
 </head>
-
 <body>
+<div id="hud"></div>
+<canvas id="cf"></canvas>
 
-<div id="app">
-
-<!-- 第一頁 -->
-<section class="screen active" id="s0">
-
-  <div class="emoji">🚨</div>
-
-  <div class="tiny">
-    IMPORTANT SYSTEM NOTICE
-  </div>
-
-  <h1>女朋友生氣了。</h1>
-
-  <p>
-    本網站偵測到一名男友<br>
-    疑似犯下嚴重錯誤。
-  </p>
-
-  <div class="card warning">
-
-    <b>危險程度</b>
-
-    <div class="meter">
-      <i></i>
-      <i></i>
-      <i></i>
-      <i></i>
-      <i></i>
-    </div>
-
-    <small>
-      極度危險（建議立刻道歉）
-    </small>
-
-  </div>
-
-  <button class="mainBtn" onclick="go(1)">
-    開始搶救男友 →
-  </button>
-
+<section class="scr on" id="s0">
+  <div style="font-size:4rem">🥺</div>
+  <h1>道歉物理大挑戰</h1>
+  <p>致 <b id="nm"></b>：<br>本人因「退追蹤」「移除粉絲」與「嘲諷物理很簡單」等罪行，<br>特別開發此遊戲，請你親自制裁我。</p>
+  <button onclick="start1()">開始制裁 ▶</button>
 </section>
 
-
-<!-- 第二頁 -->
-<section class="screen" id="s1">
-
-  <div class="tiny">
-    CASE #5201314
-  </div>
-
-  <h2>第一關：禁止狡辯</h2>
-
-  <p>
-    請選擇男友目前最正確的應對方式。
-  </p>
-
-  <div class="choices">
-
-    <button onclick="wrong(this)">
-      「可是妳也……」
-    </button>
-
-    <button onclick="wrong(this)">
-      「我哪有那麼嚴重」
-    </button>
-
-    <button onclick="wrong(this)">
-      「好啦對不起不就好了」
-    </button>
-
-    <button class="mainBtn" onclick="go(2)">
-      「對不起，是我錯了。」
-    </button>
-
-  </div>
-
-  <p id="feedback"></p>
-
+<section class="scr" id="s1">
+  <p id="t1"></p>
+  <button id="fb">➕ 重新追蹤</button>
 </section>
 
-
-<!-- 第三頁 -->
-<section class="screen" id="s2">
-
-  <div class="tiny">
-    MINIGAME 01
-  </div>
-
-  <h2>抓住逃跑的道歉</h2>
-
-  <p>
-    點到「對不起」10 次。<br>
-    它會逃跑，因為這個男友很欠揍。
-  </p>
-
-  <div class="score">
-    進度：
-    <b id="score">0</b>
-    / 10
-  </div>
-
-  <div id="arena">
-
-    <button id="sorry" onclick="catchSorry()">
-      對不起
-    </button>
-
-  </div>
-
+<section class="scr" id="s2">
+  <p id="t2"></p>
+  <canvas id="cv"></canvas>
 </section>
 
-
-<!-- 第四頁 -->
-<section class="screen" id="s3">
-
-  <div class="tiny">
-    MINIGAME 02
-  </div>
-
-  <h2>女友生存測驗</h2>
-
-  <p>
-    以下哪個答案最接近宇宙真理？
-  </p>
-
-  <div class="quiz">
-
-    <button onclick="quiz(this,false)">
-      男友永遠是對的
-    </button>
-
-    <button onclick="quiz(this,false)">
-      誰生氣誰先道歉
-    </button>
-
-    <button onclick="quiz(this,true)">
-      女友是對的（至少現在是）
-    </button>
-
-    <button onclick="quiz(this,false)">
-      這題可以不回答
-    </button>
-
-  </div>
-
-  <p id="quizFeedback"></p>
-
+<section class="scr" id="s3">
+  <h1>🧪 物理小考</h1>
+  <p id="q3"></p>
+  <div id="ops"></div>
+  <p id="f3"></p>
 </section>
 
-
-<!-- 第五頁 -->
-<section class="screen" id="s4">
-
-  <div class="emoji">
-    💌
+<section class="scr" id="s4">
+  <div id="letter"></div>
+  <div id="btns" style="margin-top:14px">
+    <button id="yes" style="font-size:1.5rem">💖 原諒他</button>
+    <button id="no" style="background:#888;box-shadow:0 6px 0 #555">不原諒</button>
   </div>
-
-  <div class="tiny">
-    FINAL BOSS
-  </div>
-
-  <h2>正式道歉</h2>
-
-  <div class="letter">
-
-    <p>
-      好啦，前面都是我在耍白痴。
-    </p>
-
-    <p>
-      但這裡是真的。
-    </p>
-
-    <p>
-      <strong>對不起。</strong>
-    </p>
-
-    <p>
-      我知道有些事情不是一句「對不起」
-      就可以直接當作沒發生過。
-    </p>
-
-    <p>
-      所以我不想只是隨便丟一句對不起給妳，
-      然後假裝事情結束。
-    </p>
-
-    <p>
-      我是真的有在想，
-      自己到底哪裡做錯了。
-    </p>
-
-    <p>
-      我希望妳知道，
-      我很在乎妳，也很在乎我們。
-    </p>
-
-    <p>
-      所以……
-    </p>
-
-    <p class="big">
-      對不起啦 🥺
-    </p>
-
-    <p style="text-align:center">
-      —— 這個笨蛋男友
-    </p>
-
-  </div>
-
-  <button class="mainBtn" onclick="go(5)">
-    我可以接受這份道歉 →
-  </button>
-
 </section>
-
-
-<!-- 最後 -->
-<section class="screen" id="s5">
-
-  <div class="emoji">
-    🎉
-  </div>
-
-  <h1>
-    系統判定完成！
-  </h1>
-
-  <p class="big">
-    女友原諒度：
-    <span id="percent">0</span>%
-  </p>
-
-  <div class="bar">
-    <i id="bar"></i>
-  </div>
-
-  <p id="finalText">
-    正在分析女友心情……
-  </p>
-
-  <button class="mainBtn" onclick="celebrate()">
-    確認原諒 💗
-  </button>
-
-  <p class="tiny">
-    ※ 本系統不保證真的能換到抱抱。<br>
-    請自行努力。
-  </p>
-
-</section>
-
-</div>
-
 
 <script>
+const NAME="寶貝", ME="笨蛋男友";   // ← 改成她的名字和你的自稱
+const $=s=>document.querySelector(s);
+let stage=0;
+$('#nm').textContent=NAME;
+function show(n){stage=n;document.querySelectorAll('.scr').forEach((e,i)=>e.classList.toggle('on',i===n));
+  $('#hud').textContent=n>0&&n<4?`關卡 ${n}/3`:'';}
 
-let current = 0;
-let score = 0;
-
-const screens =
-document.querySelectorAll(".screen");
-
-
-function go(n){
-
-  screens[current].classList.remove("active");
-
-  current = n;
-
-  screens[current].classList.add("active");
-
-  if(n === 2){
-    resetGame();
+/* ---------- 關卡 1：抓住逃跑的「重新追蹤」 ---------- */
+const fb=$('#fb');let fx,fy,vx=0,vy=0,catches=0,ptr=null;
+const M1=["它心虛，所以一直逃 🏃 把它逼到角落抓住！","抓到 1/3！「我不該退追蹤妳」🙇","抓到 2/3！「我不該移除妳的粉絲」😭","抓到 3/3！「物理才不簡單，是我嘴賤」🥲"];
+document.addEventListener('pointermove',e=>ptr={x:e.clientX,y:e.clientY});
+document.addEventListener('pointerdown',e=>ptr={x:e.clientX,y:e.clientY});
+document.addEventListener('pointerup',e=>{if(e.pointerType==='touch')ptr=null});
+fb.addEventListener('pointerdown',()=>{
+  if(stage!==1)return;
+  catches++;$('#t1').textContent=M1[catches];
+  vx=(Math.random()-.5)*40;vy=(Math.random()-.5)*40;
+  if(catches>=3)setTimeout(start2,1100);
+});
+function start1(){show(1);catches=0;$('#t1').textContent=M1[0];fx=innerWidth/2-50;fy=innerHeight/2;loop1();}
+function loop1(){
+  if(stage!==1)return;
+  const w=fb.offsetWidth,h=fb.offsetHeight,W=innerWidth-w,H=innerHeight-h;
+  if(ptr){
+    const dx=fx+w/2-ptr.x,dy=fy+h/2-ptr.y,d=Math.hypot(dx,dy)||1;
+    if(d<170){const f=(170-d)/170*(2.2-catches*.5);vx+=dx/d*f;vy+=dy/d*f;}
   }
-
+  vx*=.93;vy*=.93;
+  const s=Math.hypot(vx,vy);if(s>16){vx*=16/s;vy*=16/s}
+  fx+=vx;fy+=vy;
+  if(fx<0){fx=0;vx*=-.6}if(fx>W){fx=W;vx*=-.6}
+  if(fy<0){fy=0;vy*=-.6}if(fy>H){fy=H;vy*=-.6}
+  fb.style.transform=`translate(${fx}px,${fy}px)`;
+  requestAnimationFrame(loop1);
 }
 
-
-function wrong(button){
-
-  const messages = [
-
-    "⚠️ 危險發言！",
-
-    "❌ 好，直接加重刑期。",
-
-    "🚨 道歉不是這樣道的！",
-
-    "💀 男友存活率 -20%",
-
-    "🙃 你到底會不會道歉？"
-
-  ];
-
-  button.innerText =
-  messages[Math.floor(Math.random()*messages.length)];
-
-  button.animate(
-    [
-      {transform:"translateX(-8px)"},
-      {transform:"translateX(8px)"},
-      {transform:"translateX(-5px)"},
-      {transform:"none"}
-    ],
-    300
-  );
-
-}
-
-
-function resetGame(){
-
-  score = 0;
-
-  document.getElementById("score").innerText = score;
-
-  moveSorry();
-
-}
-
-
-function moveSorry(){
-
-  const b =
-  document.getElementById("sorry");
-
-  b.style.left =
-  (5 + Math.random()*78) + "%";
-
-  b.style.top =
-  (5 + Math.random()*75) + "%";
-
-}
-
-
-function catchSorry(){
-
-  score++;
-
-  document.getElementById("score").innerText = score;
-
-  if(score >= 10){
-
-    setTimeout(()=>{
-      go(3);
-    },400);
-
-  }else{
-
-    moveSorry();
-
+/* ---------- 關卡 2：平底鍋砸小丑（拋體運動，物理超簡單對吧？） ---------- */
+const cv=$('#cv'),g=cv.getContext('2d');
+let W,H,C,T,ball=null,drag=null,hits=0,shk=0;
+const HIT=["砰！這是「說物理很簡單」的份 🍳","砰！這是「退追蹤」的份 💥","砰！這是「移除粉絲」的份 😤"];
+const MISS=["偏了～原來拋體運動也沒那麼簡單 😏","力道不夠，再拉遠一點 💪","小丑閃開了 🤡💨"];
+function newT(){T={x:W*.45+Math.random()*W*.45,y:H*.25+Math.random()*H*.6};}
+function start2(){show(2);W=cv.width=innerWidth;H=cv.height=innerHeight-90;C={x:55,y:H-55};hits=0;ball=null;newT();
+  $('#t2').textContent="向後拖曳再放開，用平底鍋砸中 🤡 三次！";loop2();}
+function pos(e){const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+function vel(){let a=(C.x-drag.x)*.13,b=(C.y-drag.y)*.13;const s=Math.hypot(a,b);if(s>24){a*=24/s;b*=24/s}return[a,b]}
+cv.addEventListener('pointerdown',e=>{if(!ball)drag=pos(e)});
+cv.addEventListener('pointermove',e=>{if(drag)drag=pos(e)});
+cv.addEventListener('pointerup',()=>{
+  if(!drag||ball)return;
+  const[a,b]=vel();drag=null;
+  if(Math.hypot(a,b)>3)ball={x:C.x,y:C.y,vx:a,vy:b};
+});
+function loop2(){
+  if(stage!==2)return;
+  g.clearRect(0,0,W,H);
+  g.font="40px serif";g.textAlign="center";g.textBaseline="middle";
+  g.fillStyle="#0002";g.fillRect(0,H-6,W,6);
+  g.fillText("😤",C.x,C.y);
+  if(drag){ // 軌跡預覽
+    let[a,b]=vel(),x=C.x,y=C.y;g.fillStyle="#fff";
+    for(let i=0;i<40;i++){x+=a;y+=b;b+=.3;if(i%3==0){g.beginPath();g.arc(x,y,3,0,7);g.fill()}}
   }
-
-}
-
-
-function quiz(button,correct){
-
-  const feedback =
-  document.getElementById("quizFeedback");
-
-  if(correct){
-
-    feedback.innerText =
-    "✓ 正確。你成功掌握了人類社會最重要的生存知識。";
-
-    setTimeout(()=>{
-      go(4);
-    },1000);
-
-  }else{
-
-    feedback.innerText =
-    "❌ 錯誤。男友的存活率正在下降。";
-
-    button.animate(
-      [
-        {transform:"rotate(-3deg)"},
-        {transform:"rotate(3deg)"},
-        {transform:"none"}
-      ],
-      200
-    );
-
+  const sx=shk>0?(Math.random()-.5)*14:0;if(shk>0)shk--;
+  g.fillText("🤡",T.x+sx,T.y);
+  if(ball){
+    ball.vy+=.3;ball.x+=ball.vx;ball.y+=ball.vy;
+    g.save();g.translate(ball.x,ball.y);g.rotate(ball.x/20);g.fillText("🍳",0,0);g.restore();
+    if(Math.hypot(ball.x-T.x,ball.y-T.y)<42){
+      $('#t2').textContent=HIT[hits];hits++;shk=25;ball=null;
+      if(hits>=3){setTimeout(start3,1200);}else newT();
+    }else if(ball.y>H||ball.x>W+60||ball.x<-60){
+      $('#t2').textContent=MISS[Math.random()*3|0];ball=null;
+    }
   }
-
+  requestAnimationFrame(loop2);
 }
 
-
-function celebrate(){
-
-  document.getElementById("percent").innerText = "100";
-
-  document.getElementById("bar").style.width = "100%";
-
-  document.getElementById("finalText").innerText =
-  "系統：恭喜。現在請放下手機，去跟她好好說話。❤️";
-
-  for(let i=0;i<45;i++){
-
-    const heart =
-    document.createElement("div");
-
-    heart.className = "heart";
-
-    heart.innerText =
-    ["💗","💕","✨","🌸","💖"][Math.floor(Math.random()*5)];
-
-    heart.style.left =
-    Math.random()*100 + "vw";
-
-    heart.style.fontSize =
-    (18 + Math.random()*30) + "px";
-
-    heart.style.animationDuration =
-    (2 + Math.random()*2) + "s";
-
-    document.body.appendChild(heart);
-
-    setTimeout(()=>{
-      heart.remove();
-    },4500);
-
-  }
-
+/* ---------- 關卡 3：物理小考（考我） ---------- */
+const Q=[
+ {q:"牛頓第三定律：你難過的時候，我應該？",a:["說物理很簡單","給你等大反向的擁抱","已讀不回"],ok:1,bad:"答錯！這題是送分題，不要再嘴賤了 😤"},
+ {q:"女朋友生氣時，道歉的速度應該是？",a:["明天再說","等她先開口","光速（而且誠意要超光速）"],ok:2,bad:"答錯！延遲道歉會產生巨大的能量損失 🥶"},
+ {q:"我對你的愛，符合能量守恆嗎？",a:["不守恆，只增不減 💗","退追蹤後歸零","看心情"],ok:0,bad:"答錯！請重新計算 🧮"}
+];
+let qi=0;
+function start3(){show(3);qi=0;render3();}
+function render3(){
+  const q=Q[qi];$('#q3').textContent=`第 ${qi+1} 題：${q.q}`;$('#f3').textContent="";
+  $('#ops').innerHTML="";
+  q.a.forEach((t,i)=>{const b=document.createElement('button');b.className='op';b.textContent=t;
+    b.onclick=()=>{
+      if(i===q.ok){$('#f3').textContent="✅ 正確！";setTimeout(()=>{qi++;qi>=Q.length?start4():render3()},800);}
+      else{$('#f3').textContent=q.bad;b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');}
+    };$('#ops').appendChild(b);});
 }
 
+/* ---------- 終章：道歉信 + 不原諒按鈕會逃 ---------- */
+const LETTER=`親愛的${NAME}：
+
+我退追蹤你、還把你移除粉絲，是全宇宙最沒有科學根據的決定。
+
+我還嘲笑你物理，說很簡單——結果我連「讓你開心」這題都解不出來。
+
+物理也許有標準答案，但你的心情才是最難、也最重要的題目。
+
+我已經重新追蹤你了（真的，去看）。
+以後我只會說：你比物理有趣一百倍。
+
+—— ${ME} 敬上 🙇`;
+function type(el,t,i=0){el.textContent=t.slice(0,i);if(i<t.length)setTimeout(()=>type(el,t,i+1),55)}
+function start4(){show(4);type($('#letter'),LETTER);}
+const no=$('#no'),NT=["不原諒","再想想？","真的嗎？","物理學說這個選項不存在","已被黑洞吸走 🕳️"];let n=0;
+function dodge(e){
+  e.preventDefault();n++;
+  if(n>=5){no.style.display="none";return}
+  no.textContent=NT[n];no.style.position="fixed";
+  no.style.left=Math.random()*(innerWidth-160)+"px";
+  no.style.top=Math.random()*(innerHeight-60)+"px";
+  no.style.transform=`scale(${1-n*.12})`;
+}
+no.addEventListener('pointerenter',dodge);no.addEventListener('pointerdown',dodge);
+$('#yes').onclick=()=>{
+  $('#btns').innerHTML=`<p style="font-size:1.4rem;font-weight:800">🎉 謝謝${NAME}！我愛你 💖<br>（這個結局的機率：100%）</p>`;
+  confetti();
+};
+function confetti(){
+  const c=$('#cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  const E=["💖","🎉","✨","🌸","💗"],P=Array.from({length:70},()=>({x:Math.random()*c.width,y:-Math.random()*c.height,v:2+Math.random()*4,e:E[Math.random()*5|0],s:20+Math.random()*20}));
+  let f=0;(function a(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.v;x.font=p.s+"px serif";x.fillText(p.e,p.x,p.y)});
+    if(f++<500)requestAnimationFrame(a);else x.clearRect(0,0,c.width,c.height)})();
+}
 </script>
-
 </body>
 </html>
