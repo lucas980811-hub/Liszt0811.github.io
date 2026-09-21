@@ -2,213 +2,291 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>給昀庭主人的道歉小遊戲</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Liszt 的小天地</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chango&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;user-select:none;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;overflow:hidden;font-family:-apple-system,"PingFang TC","Microsoft JhengHei",sans-serif;background:linear-gradient(160deg,#ffd1dc,#c9b6ff);color:#3a2140}
-.scr{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-.scr.on{display:flex}
-h1{font-size:1.8rem;margin:.2em 0}
-p{font-size:1.05rem;line-height:1.6;max-width:520px}
-button{font-size:1.1rem;padding:.8em 1.4em;border:0;border-radius:999px;background:#ff5c8a;color:#fff;font-weight:700;box-shadow:0 6px 0 #c23a64;cursor:pointer;margin:6px}
-button:active{transform:translateY(4px);box-shadow:0 2px 0 #c23a64}
-#hud{position:fixed;top:10px;left:0;right:0;text-align:center;font-weight:700;z-index:5}
-#fb{position:absolute;left:0;top:0;z-index:3;white-space:nowrap}
-#cv{display:block;touch-action:none}
-#s2{justify-content:flex-start;padding:0}
-#t2{margin:34px 0 0;height:50px;padding:0 12px}
-.op{display:block;width:min(90vw,420px);background:#fff;color:#3a2140;box-shadow:0 6px 0 #cbb}
-.shake{animation:sh .4s}
-@keyframes sh{25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
-#letter{white-space:pre-wrap;text-align:left;background:#fffafc;padding:18px;border-radius:16px;box-shadow:0 8px 24px #0002;min-height:260px;max-width:440px;font-size:1rem;line-height:1.7}
-#cf{position:fixed;inset:0;pointer-events:none;z-index:9}
+  :root {
+    --pink: #ff8fb8;
+    --hot: #ff5c9e;
+    --soft: #ffd6e7;
+    --cream: #fff8fb;
+    --berry: #b3245f;
+    --sky: #bfe3ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+
+  body {
+    min-height: 100vh;
+    font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    color: var(--berry);
+    /* 粉紅格子布背景 */
+    background-color: var(--soft);
+    background-image:
+      linear-gradient(90deg, rgba(255,255,255,.55) 50%, transparent 50%),
+      linear-gradient(rgba(255,255,255,.55) 50%, transparent 50%);
+    background-size: 44px 44px;
+    padding:
+      calc(env(safe-area-inset-top, 0px) + 28px) 20px
+      calc(env(safe-area-inset-bottom, 0px) + 28px);
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  main {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+  }
+
+  /* 漂浮的小圖案 */
+  .float {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 5s ease-in-out infinite;
+  }
+  .f1 { top: 6%;  left: 6%;  width: 34px; animation-delay: 0s; }
+  .f2 { top: 14%; right: 7%; width: 28px; animation-delay: 1s; }
+  .f3 { top: 46%; left: 4%;  width: 26px; animation-delay: 2s; }
+  .f4 { top: 62%; right: 5%; width: 36px; animation-delay: .5s; }
+  .f5 { bottom: 8%; left: 10%; width: 30px; animation-delay: 1.5s; }
+  .f6 { bottom: 14%; right: 12%; width: 24px; animation-delay: 2.5s; }
+
+  @keyframes drift {
+    0%, 100% { transform: translateY(0) rotate(-6deg); }
+    50% { transform: translateY(-10px) rotate(6deg); }
+  }
+
+  .wrap { position: relative; z-index: 1; }
+
+  /* 頭像區 */
+  .avatar {
+    width: 190px;
+    height: 190px;
+    margin: 0 auto;
+    display: block;
+    filter: drop-shadow(0 8px 0 rgba(179, 36, 95, .18));
+  }
+
+  h1 {
+    font-family: "Chango", "Noto Sans TC", sans-serif;
+    font-weight: 400;
+    font-size: clamp(3rem, 15vw, 4.2rem);
+    line-height: 1.05;
+    margin-top: 6px;
+    color: var(--cream);
+    -webkit-text-stroke: 2px var(--berry);
+    paint-order: stroke fill;
+    text-shadow: 4px 4px 0 var(--hot);
+  }
+
+  .tagline {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 10px 20px;
+    font-size: 1.02rem;
+    line-height: 1.7;
+    background: var(--cream);
+    border: 3px solid var(--berry);
+    border-radius: 999px;
+    box-shadow: 4px 4px 0 var(--pink);
+  }
+
+  /* 聯絡卡片 */
+  .links {
+    margin-top: 32px;
+    display: grid;
+    gap: 18px;
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 14px 18px;
+    text-align: left;
+    font: inherit;
+    color: var(--berry);
+    background: var(--cream);
+    border: 3px solid var(--berry);
+    border-radius: 26px;
+    box-shadow: 5px 5px 0 var(--hot);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .card:hover  { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--hot); }
+  .card:active { transform: translate(4px, 4px);  box-shadow: 1px 1px 0 var(--hot); }
+  .card:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+
+  .card.alt { box-shadow: 5px 5px 0 #7cc4f5; }
+  .card.alt:hover  { box-shadow: 7px 7px 0 #7cc4f5; }
+  .card.alt:active { box-shadow: 1px 1px 0 #7cc4f5; }
+
+  .icon {
+    flex: none;
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--pink);
+    border: 3px solid var(--berry);
+  }
+  .card.alt .icon { background: var(--sky); }
+  .icon svg { width: 24px; height: 24px; }
+
+  .card b { display: block; font-size: 1.05rem; }
+  .card .sub { display: block; font-size: .93rem; margin-top: 2px; opacity: .8; }
+
+  .hint {
+    margin-left: auto;
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--cream);
+    background: var(--hot);
+    border-radius: 999px;
+    padding: 5px 12px;
+    white-space: nowrap;
+  }
+
+  /* 一排小圖案分隔線 */
+  .divider {
+    margin: 34px auto 0;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+  }
+  .divider svg { width: 26px; height: 26px; }
+
+  footer {
+    margin-top: 14px;
+    font-size: .85rem;
+    opacity: .75;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .float { animation: none; }
+    .card { transition: none; }
+  }
 </style>
 </head>
 <body>
-<div id="hud"></div>
-<canvas id="cf"></canvas>
 
-<section class="scr on" id="s0">
-  <div style="font-size:4rem">🥺</div>
-  <h1>給莊小胖的道歉小遊戲</h1>
-  <p>致 <b id="nm"></b>：<br>本人因「退追蹤」「移除粉絲」與「嘲諷物理很簡單」等罪行，<br>特別開發此遊戲，請你親自制裁我。</p>
-  <button onclick="start1()">開始制裁 ▶</button>
-</section>
+<!-- 漂浮小圖案：愛心、星星、亮晶晶 -->
+<svg class="float f1" viewBox="0 0 24 24"><path d="M12 21C5 15 2 11.5 2 8a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 3.500-3 7-10 13z" fill="#ff5c9e"/></svg>
+<svg class="float f2" viewBox="0 0 24 24"><path d="M12 1l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#fff8fb" stroke="#b3245f" stroke-width="1.5" stroke-linejoin="round"/></svg>
+<svg class="float f3" viewBox="0 0 24 24"><path d="M12 21C5 15 2 11.5 2 8a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 3.500-3 7-10 13z" fill="#fff8fb" stroke="#b3245f" stroke-width="1.5"/></svg>
+<svg class="float f4" viewBox="0 0 24 24"><path d="M12 2l2.900 6.500 7.100.7-5.300 4.800 1.500 7L12 17.300 5.800 21l1.500-7L2 9.200l7.100-.7z" fill="#ffe27a" stroke="#b3245f" stroke-width="1.5" stroke-linejoin="round"/></svg>
+<svg class="float f5" viewBox="0 0 24 24"><path d="M12 21C5 15 2 11.5 2 8a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 3.500-3 7-10 13z" fill="#ff8fb8"/></svg>
+<svg class="float f6" viewBox="0 0 24 24"><path d="M12 1l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#bfe3ff" stroke="#b3245f" stroke-width="1.5" stroke-linejoin="round"/></svg>
 
-<section class="scr" id="s1">
-  <p id="t1"></p>
-  <button id="fb">➕ 重新追蹤</button>
-</section>
+<main>
+  <div class="wrap">
 
-<section class="scr" id="s2">
-  <p id="t2"></p>
-  <canvas id="cv"></canvas>
-</section>
+    <!-- 頭像：可愛粉紅小熊（原創插圖） -->
+    <svg class="avatar" viewBox="0 0 200 200" role="img" aria-label="戴著蝴蝶結的粉紅小熊">
+      <!-- 耳朵 -->
+      <circle cx="46" cy="52" r="26" fill="#ff8fb8" stroke="#b3245f" stroke-width="4"/>
+      <circle cx="154" cy="52" r="26" fill="#ff8fb8" stroke="#b3245f" stroke-width="4"/>
+      <circle cx="46" cy="52" r="13" fill="#ffd6e7"/>
+      <circle cx="154" cy="52" r="13" fill="#ffd6e7"/>
+      <!-- 臉 -->
+      <ellipse cx="100" cy="112" rx="72" ry="66" fill="#ff8fb8" stroke="#b3245f" stroke-width="4"/>
+      <!-- 嘴巴區 -->
+      <ellipse cx="100" cy="132" rx="30" ry="22" fill="#fff8fb" stroke="#b3245f" stroke-width="3"/>
+      <!-- 眼睛 -->
+      <circle cx="68" cy="106" r="8" fill="#b3245f"/>
+      <circle cx="132" cy="106" r="8" fill="#b3245f"/>
+      <circle cx="71" cy="103" r="2.800" fill="#fff"/>
+      <circle cx="135" cy="103" r="2.800" fill="#fff"/>
+      <!-- 腮紅 -->
+      <ellipse cx="50" cy="130" rx="11" ry="7" fill="#ff5c9e" opacity=".55"/>
+      <ellipse cx="150" cy="130" rx="11" ry="7" fill="#ff5c9e" opacity=".55"/>
+      <!-- 鼻子嘴 -->
+      <ellipse cx="100" cy="122" rx="7" ry="5" fill="#b3245f"/>
+      <path d="M100 127 V134 M100 134 Q93 142 86 136 M100 134 Q107 142 114 136" fill="none" stroke="#b3245f" stroke-width="3" stroke-linecap="round"/>
+      <!-- 蝴蝶結 -->
+      <g transform="translate(100 46)">
+        <path d="M0 0 L-28 -16 Q-36 0 -28 16 Z" fill="#ff5c9e" stroke="#b3245f" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M0 0 L28 -16 Q36 0 28 16 Z" fill="#ff5c9e" stroke="#b3245f" stroke-width="4" stroke-linejoin="round"/>
+        <circle r="8" fill="#ffd6e7" stroke="#b3245f" stroke-width="4"/>
+      </g>
+    </svg>
 
-<section class="scr" id="s3">
-  <h1>🧪 物理小考</h1>
-  <p id="q3"></p>
-  <div id="ops"></div>
-  <p id="f3"></p>
-</section>
+    <h1>Liszt</h1>
 
-<section class="scr" id="s4">
-  <div id="letter"></div>
-  <div id="btns" style="margin-top:14px">
-    <button id="yes" style="font-size:1.5rem">💖 原諒他</button>
-    <button id="no" style="background:#888;box-shadow:0 6px 0 #555">不原諒</button>
+    <!-- ✏️ 想改自我介紹就改這裡 -->
+    <p class="tagline">嗨，我是 Liszt 🎀<br>歡迎來我的小小天地～</p>
+
+    <section class="links" aria-label="聯絡方式">
+      <a class="card" href="https://www.instagram.com/17.__liszt/" target="_blank" rel="noopener">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#b3245f" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="5"/>
+            <circle cx="12" cy="12" r="4"/>
+            <circle cx="17.500" cy="6.500" r="1" fill="#b3245f" stroke="none"/>
+          </svg>
+        </span>
+        <span>
+          <b>Instagram</b>
+          <span class="sub">17.__liszt</span>
+        </span>
+        <span class="hint">追蹤我</span>
+      </a>
+
+      <button class="card alt" type="button" id="phone" data-number="0966652811">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#b3245f" stroke-width="2.200" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.900v3a2 2 0 0 1-2.200 2 19.800 19.800 0 0 1-8.600-3.100 19.500 19.500 0 0 1-6-6A19.800 19.800 0 0 1 2.100 4.200 2 2 0 0 1 4.100 2h3a2 2 0 0 1 2 1.700c.1 1 .4 1.900.7 2.800a2 2 0 0 1-.5 2.100L8.100 9.900a16 16 0 0 0 6 6l1.300-1.300a2 2 0 0 1 2.100-.4c.9.3 1.800.6 2.800.7a2 2 0 0 1 1.700 2z"/>
+          </svg>
+        </span>
+        <span>
+          <b>電話</b>
+          <span class="sub">0966-652-811</span>
+        </span>
+        <span class="hint" id="phoneHint">點一下複製</span>
+      </button>
+    </section>
+
+    <!-- 小圖案分隔線 -->
+    <div class="divider" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 21C5 15 2 11.500 2 8a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 3.500-3 7-10 13z" fill="#ff5c9e"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2l2.900 6.500 7.100.7-5.300 4.800 1.500 7L12 17.300 5.800 21l1.500-7L2 9.200l7.100-.7z" fill="#ffe27a" stroke="#b3245f" stroke-width="1.500" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 21C5 15 2 11.500 2 8a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 3.500-3 7-10 13z" fill="#ff8fb8"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 2l2.900 6.500 7.100.7-5.300 4.800 1.500 7L12 17.300 5.800 21l1.500-7L2 9.200l7.100-.7z" fill="#bfe3ff" stroke="#b3245f" stroke-width="1.500" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 21C5 15 2 11.500 2 8a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 3.500-3 7-10 13z" fill="#ff5c9e"/></svg>
+    </div>
+
+    <footer>© Liszt 💗</footer>
   </div>
-</section>
+</main>
 
 <script>
-const NAME="莊小胖", ME="笨蛋男友";   // ← 可改成你的自稱
-const $=s=>document.querySelector(s);
-let stage=0;
-$('#nm').textContent=NAME;
-function show(n){stage=n;document.querySelectorAll('.scr').forEach((e,i)=>e.classList.toggle('on',i===n));
-  $('#hud').textContent=n>0&&n<4?`關卡 ${n}/3`:'';}
+  const btn = document.getElementById('phone');
+  const hint = document.getElementById('phoneHint');
+  let timer;
 
-/* ---------- 關卡 1：抓住逃跑的「重新追蹤」 ---------- */
-const fb=$('#fb');let fx,fy,vx=0,vy=0,catches=0,ptr=null;
-const M1=["它心虛，所以一直逃 🏃 把它逼到角落抓住！","抓到 1/3！「我不該退追蹤妳」🙇","抓到 2/3！「我不該移除妳的粉絲」😭","抓到 3/3！「物理才不簡單，是我嘴賤」🥲"];
-document.addEventListener('pointermove',e=>ptr={x:e.clientX,y:e.clientY});
-document.addEventListener('pointerdown',e=>ptr={x:e.clientX,y:e.clientY});
-document.addEventListener('pointerup',e=>{if(e.pointerType==='touch')ptr=null});
-fb.addEventListener('pointerdown',()=>{
-  if(stage!==1)return;
-  catches++;$('#t1').textContent=M1[catches];
-  vx=(Math.random()-.5)*40;vy=(Math.random()-.5)*40;
-  if(catches>=3)setTimeout(start2,1100);
-});
-function start1(){show(1);catches=0;$('#t1').textContent=M1[0];fx=innerWidth/2-50;fy=innerHeight/2;loop1();}
-function loop1(){
-  if(stage!==1)return;
-  const w=fb.offsetWidth,h=fb.offsetHeight,W=innerWidth-w,H=innerHeight-h;
-  if(ptr){
-    const dx=fx+w/2-ptr.x,dy=fy+h/2-ptr.y,d=Math.hypot(dx,dy)||1;
-    if(d<170){const f=(170-d)/170*(2.2-catches*.5);vx+=dx/d*f;vy+=dy/d*f;}
-  }
-  vx*=.93;vy*=.93;
-  const s=Math.hypot(vx,vy);if(s>16){vx*=16/s;vy*=16/s}
-  fx+=vx;fy+=vy;
-  if(fx<0){fx=0;vx*=-.6}if(fx>W){fx=W;vx*=-.6}
-  if(fy<0){fy=0;vy*=-.6}if(fy>H){fy=H;vy*=-.6}
-  fb.style.transform=`translate(${fx}px,${fy}px)`;
-  requestAnimationFrame(loop1);
-}
-
-/* ---------- 關卡 2：平底鍋砸小丑（已修正：發射點內移、可從任意位置拖曳） ---------- */
-const cv=$('#cv'),g=cv.getContext('2d');
-let W,H,C,T,ball=null,start=null,cur=null,hits=0,shk=0;
-const GRAV=.25, K=.12, VMAX=24, HITR=55;
-const HIT=["砰！這是「說物理很簡單」的份 🍳","砰！這是「退追蹤」的份 💥","砰！這是「移除粉絲」的份 😤"];
-const MISS=["偏了～原來拋體運動也沒那麼簡單 😏","再調整一下角度 💪","小丑閃開了 🤡💨"];
-function newT(){T={x:W*.45+Math.random()*W*.4,y:H*.2+Math.random()*H*.5};}
-function start2(){
-  show(2);W=cv.width=innerWidth;H=cv.height=innerHeight-90;
-  C={x:Math.max(90,W*.2),y:H*.72};
-  hits=0;ball=null;start=null;cur=null;newT();
-  $('#t2').textContent="在畫面任何地方按住、往後拉再放開，用平底鍋砸中 🤡 三次！";
-  loop2();
-}
-function pos(e){const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
-function vel(){
-  let a=(start.x-cur.x)*K,b=(start.y-cur.y)*K;
-  const s=Math.hypot(a,b);if(s>VMAX){a*=VMAX/s;b*=VMAX/s}
-  return[a,b];
-}
-cv.addEventListener('pointerdown',e=>{if(!ball){start=pos(e);cur=start}});
-cv.addEventListener('pointermove',e=>{if(start)cur=pos(e)});
-cv.addEventListener('pointerup',()=>{
-  if(!start||ball)return;
-  const[a,b]=vel();start=cur=null;
-  if(Math.hypot(a,b)>2)ball={x:C.x,y:C.y,vx:a,vy:b};
-});
-function loop2(){
-  if(stage!==2)return;
-  g.clearRect(0,0,W,H);
-  g.font="40px serif";g.textAlign="center";g.textBaseline="middle";
-  g.fillStyle="#0002";g.fillRect(0,H-6,W,6);
-  g.fillText("😤",C.x,C.y);
-  if(start){ // 拖曳線 + 軌跡預覽
-    g.strokeStyle="#ffffff88";g.lineWidth=3;g.beginPath();g.moveTo(start.x,start.y);g.lineTo(cur.x,cur.y);g.stroke();
-    let[a,b]=vel(),x=C.x,y=C.y;g.fillStyle="#fff";
-    for(let i=0;i<70;i++){x+=a;y+=b;b+=GRAV;if(i%3==0){g.beginPath();g.arc(x,y,3,0,7);g.fill()}}
-  }
-  const sx=shk>0?(Math.random()-.5)*14:0;if(shk>0)shk--;
-  g.fillText("🤡",T.x+sx,T.y);
-  if(ball){
-    for(let s=0;s<4&&ball;s++){ // 分段偵測，避免穿過小丑
-      ball.vy+=GRAV/4;ball.x+=ball.vx/4;ball.y+=ball.vy/4;
-      if(Math.hypot(ball.x-T.x,ball.y-T.y)<HITR){
-        $('#t2').textContent=HIT[hits];hits++;shk=25;ball=null;
-        if(hits>=3)setTimeout(start3,1200);else newT();
-      }
+  btn.addEventListener('click', async () => {
+    const number = btn.dataset.number;
+    try {
+      await navigator.clipboard.writeText(number);
+      hint.textContent = '已複製 ✓';
+      clearTimeout(timer);
+      timer = setTimeout(() => (hint.textContent = '點一下複製'), 1800);
+    } catch (e) {
+      // 剪貼簿不能用時，改成直接撥號
+      window.location.href = 'tel:' + number;
     }
-    if(ball){
-      g.save();g.translate(ball.x,ball.y);g.rotate(ball.x/20);g.fillText("🍳",0,0);g.restore();
-      if(ball.y>H+60||ball.x>W+80||ball.x<-80){
-        $('#t2').textContent=MISS[Math.random()*3|0];ball=null;
-      }
-    }
-  }
-  requestAnimationFrame(loop2);
-}
-
-/* ---------- 關卡 3：物理小考（考我） ---------- */
-const Q=[
- {q:"牛頓第三定律：你難過的時候，我應該？",a:["說物理很簡單","給你等大反向的擁抱","已讀不回"],ok:1,bad:"答錯！這題是送分題，不要再嘴賤了 😤"},
- {q:"女朋友生氣時，道歉的速度應該是？",a:["明天再說","等她先開口","光速（而且誠意要超光速）"],ok:2,bad:"答錯！延遲道歉會產生巨大的能量損失 🥶"},
- {q:"我對你的愛，符合能量守恆嗎？",a:["不守恆，只增不減 💗","退追蹤後歸零","看心情"],ok:0,bad:"答錯！請重新計算 🧮"}
-];
-let qi=0;
-function start3(){show(3);qi=0;render3();}
-function render3(){
-  const q=Q[qi];$('#q3').textContent=`第 ${qi+1} 題：${q.q}`;$('#f3').textContent="";
-  $('#ops').innerHTML="";
-  q.a.forEach((t,i)=>{const b=document.createElement('button');b.className='op';b.textContent=t;
-    b.onclick=()=>{
-      if(i===q.ok){$('#f3').textContent="✅ 正確！";setTimeout(()=>{qi++;qi>=Q.length?start4():render3()},800);}
-      else{$('#f3').textContent=q.bad;b.classList.remove('shake');void b.offsetWidth;b.classList.add('shake');}
-    };$('#ops').appendChild(b);});
-}
-
-/* ---------- 終章：道歉信 + 不原諒按鈕會逃 ---------- */
-const LETTER=`親愛的${NAME}：
-
-我退追蹤你、還把你移除粉絲，是全宇宙最沒有科學根據的決定。
-
-我還嘲笑你物理，說很簡單——結果我連「讓你開心」這題都解不出來。
-
-物理也許有標準答案，但你的心情才是最捉摸不透，連我這個李斯特都搞不出來的的題目。
-
-我已經重新追蹤你了（真的，去看）。
-以後我只會說：物理不簡單 拿捏你的心更不簡單❤️。
-
-—— 最帥的黃奕瑄 敬上 🙇`;
-function type(el,t,i=0){el.textContent=t.slice(0,i);if(i<t.length)setTimeout(()=>type(el,t,i+1),55)}
-function start4(){show(4);type($('#letter'),LETTER);}
-const no=$('#no'),NT=["不原諒","再想想？","真的嗎？","物理學說這個選項不存在","已被黑洞吸走 🕳️"];let n=0;
-function dodge(e){
-  e.preventDefault();n++;
-  if(n>=5){no.style.display="none";return}
-  no.textContent=NT[n];no.style.position="fixed";
-  no.style.left=Math.random()*(innerWidth-160)+"px";
-  no.style.top=Math.random()*(innerHeight-60)+"px";
-  no.style.transform=`scale(${1-n*.12})`;
-}
-no.addEventListener('pointerenter',dodge);no.addEventListener('pointerdown',dodge);
-$('#yes').onclick=()=>{
-  $('#btns').innerHTML=`<p style="font-size:1.4rem;font-weight:800">🎉 謝謝${NAME}！我愛你 💖<br>（這個結局的機率：100%）</p>`;
-  confetti();
-};
-function confetti(){
-  const c=$('#cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
-  const E=["💖","🎉","✨","🌸","💗"],P=Array.from({length:70},()=>({x:Math.random()*c.width,y:-Math.random()*c.height,v:2+Math.random()*4,e:E[Math.random()*5|0],s:20+Math.random()*20}));
-  let f=0;(function a(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.v;x.font=p.s+"px serif";x.fillText(p.e,p.x,p.y)});
-    if(f++<500)requestAnimationFrame(a);else x.clearRect(0,0,c.width,c.height)})();
-}
+  });
 </script>
 </body>
 </html>
