@@ -1,634 +1,280 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>給莊小胖的小小道歉遊戲</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐶</text></svg>">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>臭狗 ❤️ 小胖主人</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --ink:#3a1f4d; --pink:#ff6fa3; --pink-soft:#ffd6e5; --milk:#fff4f8;
-  --mint:#7fe3c6; --butter:#ffd76a; --lav:#cdbbff; --white:#fff;
-  --shadow:0 6px 0 var(--ink);
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;margin:0}
-body{
-  font-family:"Chiron GoRound TC","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
-  color:var(--ink);line-height:1.6;overflow:hidden;touch-action:manipulation;
-  -webkit-user-select:none;user-select:none;
-  background:
-    radial-gradient(circle at 15% 8%, #ffd0e3 0, transparent 38%),
-    radial-gradient(circle at 92% 92%, #ddd2ff 0, transparent 42%),
-    radial-gradient(#ffc2da 1.5px, transparent 1.6px) 0 0/22px 22px,
-    var(--milk);
-}
-#app{position:relative;max-width:520px;height:100vh;height:100dvh;margin:0 auto;display:flex;flex-direction:column;
-  padding:env(safe-area-inset-top) 14px env(safe-area-inset-bottom)}
+  :root{
+    --pink1:#fff0f5;
+    --pink2:#ffd6e8;
+    --rose:#ff4d79;
+    --plum:#9d4edd;
+    --text:#5a3a4a;
+  }
+  *{ box-sizing:border-box; }
+  html,body{
+    margin:0; padding:0; width:100%; height:100%;
+    background:linear-gradient(160deg, var(--pink1), #f3e8ff 70%);
+    overflow:hidden;
+    font-family:'Noto Sans TC', sans-serif;
+    color:var(--text);
+  }
+  #trail{ position:fixed; inset:0; pointer-events:none; z-index:5; }
 
-/* HUD */
-#hud{display:flex;align-items:center;gap:10px;padding:12px 0 6px}
-#hud.hide{display:none}
-.face{font-size:1.9rem;width:52px;height:52px;display:grid;place-items:center;background:#fff;border:3px solid var(--ink);border-radius:50%;box-shadow:0 3px 0 var(--ink);flex:none}
-.face.bump{animation:bump .5s}
-.meter-wrap{flex:1;min-width:0}
-.meter-label{font-weight:900;font-size:.85rem;margin-bottom:4px;display:flex;justify-content:space-between}
-.meter{height:17px;background:#fff;border:3px solid var(--ink);border-radius:99px;overflow:hidden}
-.meter i{display:block;height:100%;width:100%;background:repeating-linear-gradient(45deg,var(--pink) 0 10px,#ff92b9 10px 20px);transition:width .9s cubic-bezier(.3,1.3,.5,1)}
-.icon-btn{flex:none;width:44px;height:44px;border-radius:14px;border:3px solid var(--ink);background:#fff;font-size:1.2rem;box-shadow:0 3px 0 var(--ink);cursor:pointer}
-.icon-btn:active{transform:translateY(3px);box-shadow:none}
+  .screen{
+    position:fixed; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center;
+    z-index:10;
+  }
+  .brand{
+    font-family:'Zhi Mang Xing', cursive;
+    font-size:44px; color:var(--rose); margin:0 0 6px;
+  }
+  .sub{ font-size:14px; color:var(--text); opacity:0.75; margin:0 0 26px; }
 
-/* screens */
-.screen{display:none;flex:1;min-height:0;flex-direction:column;overflow-y:auto;padding:10px 0 18px;gap:12px}
-.screen.active{display:flex;animation:in .35s ease}
-@keyframes in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  button.cta{
+    padding:12px 34px; border-radius:999px; border:none;
+    background:var(--rose); color:#fff; font-size:16px;
+    font-family:inherit; cursor:pointer; box-shadow:0 8px 20px rgba(255,77,121,0.35);
+    transition:transform 0.15s ease;
+  }
+  button.cta:hover{ transform:translateY(-2px); }
+  button.cta:focus-visible{ outline:2px solid var(--plum); outline-offset:3px; }
 
-/* buttons */
-.btn{font:inherit;font-weight:900;font-size:1.1rem;padding:13px 22px;border:3px solid var(--ink);border-radius:18px;background:var(--pink);color:var(--ink);box-shadow:0 5px 0 var(--ink);cursor:pointer;transition:transform .08s,box-shadow .08s}
-.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
-.btn.mint{background:var(--mint)}
-.btn.butter{background:var(--butter)}
-.btn.lav{background:var(--lav)}
-.btn.big{font-size:1.3rem;padding:16px 26px}
+  #hud{
+    position:fixed; top:20px; left:0; right:0; z-index:8;
+    display:flex; justify-content:center; align-items:center; gap:8px;
+    font-size:15px; pointer-events:none;
+  }
+  #hud span{ font-weight:600; color:var(--rose); }
 
-/* title */
-#s-title{justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden}
-.floaty{position:absolute;font-size:1.8rem;opacity:.9;animation:drift 6s ease-in-out infinite;pointer-events:none}
-@keyframes drift{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-16px) rotate(8deg)}}
-.duo{font-size:4.6rem;line-height:1;display:flex;gap:6px;align-items:center;justify-content:center}
-.duo .dog{cursor:pointer;display:inline-block;animation:bob 1.6s ease-in-out infinite}
-.duo .pig{display:inline-block;animation:bob 1.6s ease-in-out .4s infinite}
-.duo .mid{font-size:2.6rem;animation:beat 1s infinite}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-h1{margin:14px 0 4px;font-size:clamp(2.1rem,10.5vw,3rem);line-height:1.2;font-weight:900;color:#fff;
-  -webkit-text-stroke:7px var(--ink);paint-order:stroke fill;text-shadow:0 5px 0 var(--ink);letter-spacing:.02em}
-.sub{font-weight:900;background:var(--butter);border:3px solid var(--ink);border-radius:99px;padding:4px 16px;display:inline-block;transform:rotate(-2deg);margin:8px 0 22px}
-.tiny{font-size:.8rem;opacity:.75;margin-top:14px}
+  .heart{
+    position:absolute; font-size:30px; cursor:pointer;
+    user-select:none; z-index:6; line-height:1;
+    filter:drop-shadow(0 4px 8px rgba(255,77,121,0.25));
+  }
 
-/* crimes */
-h2{margin:0;font-size:1.5rem;font-weight:900}
-.crime{position:relative;border:3px solid var(--ink);border-radius:18px;padding:12px 78px 12px 14px;box-shadow:0 4px 0 var(--ink)}
-.crime:nth-child(2){background:var(--pink-soft);transform:rotate(-1.2deg)}
-.crime:nth-child(3){background:#e6dcff;transform:rotate(1deg)}
-.crime:nth-child(4){background:#c9f5e8;transform:rotate(-.6deg)}
-.crime b{font-size:1.05rem}
-.crime p{margin:2px 0 0;font-size:.92rem}
-.guilty{position:absolute;right:10px;top:50%;transform:translateY(-50%) rotate(12deg);font-weight:900;color:#e0245e;border:3px solid #e0245e;border-radius:10px;padding:0 8px;font-size:1.15rem;background:#fff8}
+  .float-msg{
+    position:fixed; z-index:9; font-size:14px; color:var(--rose);
+    font-weight:600; pointer-events:none; white-space:nowrap;
+    animation:floatUp 1.4s ease forwards;
+  }
+  @keyframes floatUp{
+    0%{ opacity:0; transform:translateY(0); }
+    15%{ opacity:1; }
+    100%{ opacity:0; transform:translateY(-60px); }
+  }
 
-/* level head */
-.badge{display:inline-block;background:var(--ink);color:#fff;border-radius:99px;padding:1px 14px;font-weight:900;font-size:.85rem;margin-bottom:4px}
-.lv-head p{margin:4px 0 0;font-size:.92rem}
-.lv-stats{display:flex;justify-content:space-between;font-weight:900;font-size:1.05rem}
-.arena{position:relative;flex:1;min-height:300px;border:3px solid var(--ink);border-radius:22px;background:
-  linear-gradient(#fff,#fff7fb);overflow:hidden;box-shadow:var(--shadow);touch-action:none}
-.arena.shake{animation:shake .35s}
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
-@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.35) rotate(-8deg)}100%{transform:scale(1)}}
+  #ending{
+    position:fixed; inset:0; z-index:20; display:none;
+    align-items:center; justify-content:center; flex-direction:column;
+    background:linear-gradient(160deg, #ffe3ee, #efe0ff);
+    text-align:center; padding:20px;
+  }
+  #ending .msg{
+    font-family:'Zhi Mang Xing', cursive;
+    font-size:34px; color:var(--rose); max-width:480px; line-height:1.6;
+    margin-bottom:22px;
+  }
+  #ending button{
+    margin-top:6px; background:transparent; border:1.5px solid var(--rose);
+    color:var(--rose); padding:9px 26px; border-radius:999px;
+    font-family:inherit; font-size:14px; cursor:pointer;
+  }
 
-/* level 1 drops */
-.drop{position:absolute;top:-70px;left:0;display:flex;flex-direction:column;align-items:center;font-size:2.3rem;line-height:1;background:none;border:0;padding:6px;font-family:inherit;color:var(--ink);animation:fall linear forwards;will-change:transform;cursor:pointer}
-.drop small{font-size:.7rem;font-weight:900;margin-top:3px;background:#fff;border:2px solid var(--ink);border-radius:99px;padding:0 7px}
-.drop.bad small{background:var(--ink);color:#fff}
-.drop.gold small{background:var(--butter)}
-@keyframes fall{from{transform:translateY(0)}to{transform:translateY(var(--h))}}
-.pop{position:absolute;font-weight:900;font-size:1.25rem;pointer-events:none;animation:floatup .8s ease-out forwards;color:var(--ink);text-shadow:0 0 6px #fff,0 0 6px #fff;white-space:nowrap}
-@keyframes floatup{from{transform:translate(-50%,0)}to{transform:translate(-50%,-56px);opacity:0}}
+  #hidden{ display:none; }
 
-/* level 2 fans */
-.fan{position:absolute;left:0;top:0;width:56px;height:56px;font-size:2.2rem;line-height:1;display:grid;place-items:center;background:#fff;border:3px solid var(--ink);border-radius:50%;box-shadow:0 3px 0 var(--ink);padding:0;cursor:pointer;will-change:transform}
-.basket{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);background:var(--butter);border:3px solid var(--ink);border-radius:16px;padding:6px 14px;font-weight:900;white-space:nowrap;box-shadow:0 3px 0 var(--ink)}
-.basket.bump{animation:basketbump .3s}
-@keyframes basketbump{50%{transform:translateX(-50%) scale(1.18)}}
-
-/* level 3 quiz */
-.quiz{border:3px solid var(--ink);border-radius:22px;background:#fff;box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:12px}
-.quiz .qno{font-weight:900;font-size:.85rem;color:#c2245f}
-.quiz .qtext{font-size:1.15rem;font-weight:900;line-height:1.5}
-.opts{display:flex;flex-direction:column;gap:10px}
-.opt{font:inherit;font-weight:700;text-align:left;padding:12px 14px;border:3px solid var(--ink);border-radius:16px;background:var(--milk);color:var(--ink);box-shadow:0 3px 0 var(--ink);cursor:pointer}
-.opt:active{transform:translateY(3px);box-shadow:none}
-.opt.ok{background:var(--mint)}
-.opt.no{background:#ffb3c7;text-decoration:line-through;opacity:.7}
-.opt.shake{animation:shake .35s}
-.opt:disabled{cursor:default}
-.qmsg{min-height:3.2em;font-size:.95rem;font-weight:700;background:var(--butter);border:3px solid var(--ink);border-radius:14px;padding:8px 12px}
-.dots{display:flex;gap:8px;justify-content:center}
-.dots span{width:14px;height:14px;border-radius:50%;border:3px solid var(--ink);background:#fff}
-.dots span.on{background:var(--pink)}
-
-/* boss */
-.boss-msg{font-weight:900;text-align:center;min-height:3.2em;background:#fff;border:3px solid var(--ink);border-radius:16px;padding:8px 12px;box-shadow:0 4px 0 var(--ink)}
-.boss{position:relative;height:290px;border:3px solid var(--ink);border-radius:22px;background:
-  repeating-linear-gradient(45deg,#fff 0 14px,#fff0f6 14px 28px);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;overflow:hidden}
-#yesBtn{transition:transform .35s cubic-bezier(.3,1.6,.5,1);animation:beat 1.4s infinite}
-#noBtn{position:absolute;right:10px;top:10px;padding:8px 14px;font-size:.95rem;background:#e7e2ee;transition:left .18s,top .18s,transform .18s;touch-action:none}
-
-/* ending */
-.cert{text-align:center;font-weight:900}
-.cert small{display:block;font-weight:700;opacity:.8}
-.letter{position:relative;background:#fffdf5;border:3px solid var(--ink);border-radius:18px;padding:18px;box-shadow:var(--shadow);line-height:1.95;white-space:pre-wrap;font-size:1rem}
-.letter .ghost{visibility:hidden}
-.letter .live{position:absolute;left:18px;right:18px;top:18px}
-.letter .live::after{content:"▍";animation:blink .8s steps(1) infinite}
-.letter.done .live::after{content:""}
-@keyframes blink{50%{opacity:0}}
-#afterLetter{display:none;flex-direction:column;gap:14px;animation:in .5s ease}
-#afterLetter.show{display:flex}
-.coupons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.coupon{min-height:128px;border:3px dashed var(--ink);border-radius:16px;background:var(--butter);padding:10px;font:inherit;color:var(--ink);cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}
-.coupon:nth-child(2){background:var(--pink-soft)}
-.coupon:nth-child(3){background:var(--mint)}
-.coupon:nth-child(4){background:var(--lav)}
-.coupon .back{display:none;font-size:.86rem;font-weight:700;line-height:1.45}
-.coupon.open .front{display:none}
-.coupon.open .back{display:block}
-.coupon .em{font-size:2rem}
-.hugcount{text-align:center;font-weight:700;font-size:.9rem}
-.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-
-/* overlay, stamp, canvas */
-#modal{position:fixed;inset:0;background:rgba(58,31,77,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
-#modal.show{display:flex}
-.mcard{width:100%;max-width:400px;background:#fff;border:3px solid var(--ink);border-radius:24px;box-shadow:0 8px 0 var(--ink);padding:22px 18px;text-align:center;animation:pop .35s cubic-bezier(.3,1.6,.5,1)}
-@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
-.mcard .em{font-size:3.2rem;line-height:1.1}
-.mcard h3{margin:6px 0;font-size:1.4rem}
-.mcard p{margin:0 0 16px;font-weight:700}
-.mcard .btns{display:flex;flex-direction:column;gap:10px}
-#stamp{position:fixed;left:50%;top:42%;z-index:60;pointer-events:none;font-size:2.7rem;font-weight:900;color:var(--pink);white-space:nowrap;
-  -webkit-text-stroke:7px var(--ink);paint-order:stroke fill;transform:translate(-50%,-50%) rotate(-8deg) scale(0);opacity:0}
-#stamp.go{animation:stampin 1.3s ease forwards}
-@keyframes stampin{0%{transform:translate(-50%,-50%) rotate(-8deg) scale(3);opacity:0}20%{transform:translate(-50%,-50%) rotate(-8deg) scale(1);opacity:1}80%{transform:translate(-50%,-50%) rotate(-8deg) scale(1);opacity:1}100%{transform:translate(-50%,-50%) rotate(-8deg) scale(1.15);opacity:0}}
-#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
-@media (prefers-reduced-motion:reduce){.floaty,.duo .dog,.duo .pig,.duo .mid,#yesBtn{animation:none}}
+  @media (prefers-reduced-motion: reduce){
+    .float-msg{ animation:none; }
+  }
 </style>
 </head>
 <body>
-<div id="app">
 
-  <header id="hud" class="hide">
-    <div class="face" id="face">😡</div>
-    <div class="meter-wrap">
-      <div class="meter-label"><span>莊小胖的氣氣值</span><span id="angerNum">100%</span></div>
-      <div class="meter"><i id="meterFill"></i></div>
-    </div>
-    <button class="icon-btn" id="soundBtn" aria-label="開關音效">🔊</button>
-  </header>
+<canvas id="trail"></canvas>
 
-  <!-- 標題 -->
-  <section id="s-title" class="screen active">
-    <span class="floaty" style="left:8%;top:8%">🎀</span>
-    <span class="floaty" style="right:10%;top:12%;animation-delay:-2s">✨</span>
-    <span class="floaty" style="left:12%;bottom:12%;animation-delay:-4s">🍡</span>
-    <span class="floaty" style="right:8%;bottom:16%;animation-delay:-1s">💗</span>
-    <div class="duo"><span class="dog" id="dogTap">🐶</span><span class="mid">💗</span><span class="pig">🐷</span></div>
-    <h1>給莊小胖的<br>小小道歉遊戲</h1>
-    <div class="sub">出戰者：奕瑄狗狗 🐾</div>
-    <button class="btn big" id="startBtn">開始道歉任務</button>
-    <div class="tiny">（遊玩前請先深呼吸，並準備好可愛的表情）</div>
-  </section>
+<div id="hud" class="hidden" style="display:none;">收集了 <span id="score">0</span> 顆 ❤️</div>
 
-  <!-- 罪狀 -->
-  <section id="s-crimes" class="screen">
-    <div>
-      <span class="badge">案件通知</span>
-      <h2>奕瑄狗狗的三大罪狀</h2>
-    </div>
-    <div class="crimes" style="display:flex;flex-direction:column;gap:14px">
-      <div class="crime" style="display:none"></div>
-      <div class="crime"><b>【罪一】退追</b><p>手指跑得比腦袋快，判定：幼稚度 100%。</p><span class="guilty">有罪</span></div>
-      <div class="crime"><b>【罪二】移粉</b><p>把莊小胖從粉絲名單搬走，搬家公司都嚇到。</p><span class="guilty">有罪</span></div>
-      <div class="crime"><b>【罪三】說物理簡單＋嘲諷</b><p>牛頓的蘋果氣到直接砸下來。</p><span class="guilty">有罪</span></div>
-    </div>
-    <p style="text-align:center;font-weight:900;margin:2px 0">莊小胖氣氣值：100%（爆表）<br>只有通過四個關卡，才能拿到原諒。</p>
-    <button class="btn big" id="crimeBtn">我認罪，開始贖罪 🥺</button>
-  </section>
-
-  <!-- 第一關 -->
-  <section id="s-l1" class="screen">
-    <div class="lv-head">
-      <span class="badge">第一關</span>
-      <h2>追蹤回來大作戰</h2>
-      <p>點 ❤ 重新追蹤莊小胖！30 秒內收集 15 顆。💔 是退追炸彈，千萬別碰。💖 一顆算三顆。</p>
-    </div>
-    <div class="lv-stats"><span>❤ <b id="l1s">0</b> / 15</span><span>⏱ <b id="l1t">30</b> 秒</span></div>
-    <div class="arena" id="arena1"></div>
-  </section>
-
-  <!-- 第二關 -->
-  <section id="s-l2" class="screen">
-    <div class="lv-head">
-      <span class="badge">第二關</span>
-      <h2>粉絲搬回來</h2>
-      <p>粉絲們被嚇到到處亂跑！35 秒內把 8 位粉絲抓回莊小胖粉絲團，越抓越快喔。</p>
-    </div>
-    <div class="lv-stats"><span>🏠 <b id="l2s">0</b> / 8</span><span>⏱ <b id="l2t">35</b> 秒</span></div>
-    <div class="arena" id="arena2"><div class="basket" id="basket">🏠 莊小胖粉絲團</div></div>
-  </section>
-
-  <!-- 第三關 -->
-  <section id="s-l3" class="screen">
-    <div class="lv-head">
-      <span class="badge">第三關</span>
-      <h2>物理小考（超級難）</h2>
-      <p>答對才能過關，答錯會被電。莊小胖是監考官。</p>
-    </div>
-    <div class="quiz">
-      <div class="qno" id="qNo"></div>
-      <div class="qtext" id="qText"></div>
-      <div class="opts" id="qOpts"></div>
-      <div class="qmsg" id="qMsg"></div>
-    </div>
-    <div class="dots" id="qDots"></div>
-  </section>
-
-  <!-- 最終關 -->
-  <section id="s-l4" class="screen">
-    <div class="lv-head">
-      <span class="badge">最終關</span>
-      <h2>原諒判決</h2>
-      <p>莊小胖大法官，請按下你的判決。</p>
-    </div>
-    <div class="boss-msg" id="bossMsg"></div>
-    <div class="boss" id="bossArena">
-      <button class="btn big mint" id="yesBtn">原諒奕瑄狗狗 🥹</button>
-      <button class="btn" id="noBtn">不原諒</button>
-    </div>
-  </section>
-
-  <!-- 結局 -->
-  <section id="s-end" class="screen">
-    <div class="cert">
-      <h2>🎉 道歉成功！氣氣值 0%</h2>
-      <small>奕瑄狗狗獲得稱號：全宇宙最會道歉的狗 🏅</small>
-      <small>其實妳想說我是死肥豬我知道但我很瘦</small>
-    </div>
-    <div class="letter" id="letter" title="點一下可以跳過">
-      <span class="ghost" id="ghost"></span><span class="live" id="live"></span>
-    </div>
-    <div id="afterLetter">
-      <div>
-        <b>🎁 道歉禮包（點卡片打開）</b>
-        <div class="coupons" style="margin-top:8px">
-          <button class="coupon"><span class="front"><span class="em">🧋</span><br>手搖飲券</span><span class="back">莊小胖指定口味，奕瑄狗狗買單。全糖也可以（今天不管熱量）。</span></button>
-          <button 
-  class="coupon"><span class="front"><span class="em">🫂</span><br>抱抱券</span><span class="back">需要時隨時可以領，不限次數，不限地點。</span></button>
-          <button class="coupon"><span class="front"><span class="em">🏆</span><br>物理最強證書</span><span class="back">恭喜莊小胖，物理超厲害。奕瑄狗狗再也不敢說簡單。</span></button>
-          <button class="coupon"><span class="front"><span class="em">📌</span><br>永久追蹤證明</span><span class="back">奕瑄狗狗追蹤莊小胖 ∞ 天，保證永不退追、永不移粉。</span></button>
-        </div>
-      </div>
-      <button class="btn big lav" id="hugBtn">抱抱莊小胖 🫂</button>
-      <div class="hugcount" id="hugCount">已經抱抱 0 次（上限：無限）</div>
-      <div class="row"><button class="btn butter" id="replayBtn">再玩一次</button></div>
-    </div>
-  </section>
+<div class="screen" id="startScreen">
+  <p class="brand">臭狗 ❤️ 小胖主人</p>
+  <p class="sub">接住愛心,給你一個驚喜</p>
+  <button class="cta" id="startBtn">點我開始</button>
 </div>
 
-<div id="modal"><div class="mcard"><div class="em" id="mEmoji"></div><h3 id="mTitle"></h3><p id="mText"></p><div class="btns" id="mBtns"></div></div></div>
-<div id="stamp"></div>
-<canvas id="fx"></canvas>
+<div id="ending">
+  <div class="msg" id="endingMsg"></div>
+  <button id="replayBtn">再玩一次</button>
+</div>
 
 <script>
 (function(){
-'use strict';
-const $=s=>document.querySelector(s);
-const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+  "use strict";
 
-/* ---------- 音效 ---------- */
-let AC=null,muted=false;
-function tone(f,d,type,vol,delay){
-  if(muted)return;
-  try{
-    AC=AC||new(window.AudioContext||window.webkitAudioContext)();
-    const t=AC.currentTime+(delay||0),o=AC.createOscillator(),g=AC.createGain();
-    o.type=type||'sine';o.frequency.setValueAtTime(f,t);
-    g.gain.setValueAtTime(vol||.08,t);g.gain.exponentialRampToValueAtTime(.0001,t+(d||.12));
-    o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+(d||.12));
-  }catch(e){}
-}
-const sfx={
-  tap:()=>tone(520,.07,'triangle'),
-  pop:()=>{tone(660,.08,'triangle');tone(990,.1,'triangle',.07,.05)},
-  bad:()=>tone(170,.28,'sawtooth',.07),
-  win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.2,'triangle',.08,i*.1)),
-  bark:()=>{tone(300,.1,'square',.06);tone(220,.12,'square',.06,.12)}
-};
-$('#soundBtn').onclick=()=>{muted=!muted;$('#soundBtn').textContent=muted?'🔇':'🔊';if(!muted)sfx.tap()};
+  // ------- 改名字改這裡就好 -------
+  const nameHer = "小胖主人";
+  const nameMe  = "臭狗";
+  const winScore = 15;
+  // --------------------------------
 
-/* ---------- 粒子特效 ---------- */
-const fx=$('#fx'),ctx=fx.getContext('2d');
-let P=[],fxRunning=false;const dpr=Math.min(2,window.devicePixelRatio||1);
-function resizeFx(){fx.width=innerWidth*dpr;fx.height=innerHeight*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
-addEventListener('resize',resizeFx);resizeFx();
-function burst(x,y,n,set){
-  n=n||18;set=set||['❤','💖','✨','⭐','🎀'];
-  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=120+Math.random()*260;
-    P.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-150,ch:set[Math.random()*set.length|0],sz:16+Math.random()*16,life:0,max:.9+Math.random()*.7,r:Math.random()*6,vr:(Math.random()-.5)*8,g:520});}
-  runFx();
-}
-function rain(ms){
-  const t0=performance.now(),set=['❤','🎀','✨','🐶','🐷','💖'];
-  const iv=setInterval(()=>{
-    for(let i=0;i<4;i++)P.push({x:Math.random()*innerWidth,y:-20,vx:(Math.random()-.5)*60,vy:80+Math.random()*120,ch:set[Math.random()*set.length|0],sz:18+Math.random()*18,life:0,max:8,r:0,vr:(Math.random()-.5)*4,g:0});
-    runFx();if(performance.now()-t0>ms)clearInterval(iv);
-  },120);
-}
-function runFx(){
-  if(fxRunning)return;fxRunning=true;let last=performance.now();
-  (function f(now){
-    const dt=Math.min(.04,(now-last)/1000);last=now;
-    ctx.clearRect(0,0,innerWidth,innerHeight);
-    P=P.filter(p=>p.life<p.max&&p.y<innerHeight+40);
-    for(const p of P){
-      p.life+=dt;p.vy+=p.g*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.r+=p.vr*dt;
-      ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);
-      ctx.globalAlpha=Math.max(0,1-p.life/p.max);ctx.font=p.sz+'px serif';
-      ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.ch,0,0);ctx.restore();
+  const sweetLines = [
+    `想到${nameHer}就笑了 ❤️`,
+    `${nameMe}最愛${nameHer} ❤️`,
+    `抱抱 ❤️`,
+    `今天也要笑笑的 ❤️`,
+    `每天都想見到你 ❤️`,
+    `你是全世界 ❤️`,
+    `再靠近一點點 ❤️`
+  ];
+
+  const startScreen = document.getElementById('startScreen');
+  const startBtn = document.getElementById('startBtn');
+  const hud = document.getElementById('hud');
+  const scoreEl = document.getElementById('score');
+  const ending = document.getElementById('ending');
+  const endingMsg = document.getElementById('endingMsg');
+  const replayBtn = document.getElementById('replayBtn');
+
+  let score = 0;
+  let spawnTimer = null;
+  let playing = false;
+
+  function randomBetween(a,b){ return a + Math.random()*(b-a); }
+
+  function spawnHeart(){
+    if(!playing) return;
+    const el = document.createElement('div');
+    el.className = 'heart';
+    el.textContent = '❤️';
+    const x = randomBetween(6, 94);
+    const size = randomBetween(22, 38);
+    el.style.left = x + 'vw';
+    el.style.top = '105vh';
+    el.style.fontSize = size + 'px';
+    document.body.appendChild(el);
+
+    const duration = randomBetween(4200, 6800);
+    const drift = randomBetween(-40, 40);
+    const start = performance.now();
+
+    function animate(now){
+      const p = Math.min((now - start) / duration, 1);
+      el.style.transform = `translate(${drift * p}px, ${-p * (window.innerHeight + 200)}px) rotate(${p*20}deg)`;
+      el.style.opacity = 1 - p*0.15;
+      if(p < 1 && el.parentNode){
+        requestAnimationFrame(animate);
+      } else if(el.parentNode){
+        el.remove();
+      }
     }
-    if(P.length)requestAnimationFrame(f);else{fxRunning=false;ctx.clearRect(0,0,innerWidth,innerHeight)}
-  })(last);
-}
+    requestAnimationFrame(animate);
 
-/* ---------- 共用 ---------- */
- const screens=[...document.querySelectorAll('.screen')];
-function go(id){
-  screens.forEach(s=>s.classList.toggle('active',s.id===id));
-  $('#hud').classList.toggle('hide',id==='s-title');
-  const el=$('#'+id);if(el)el.scrollTop=0;
-}
-function setAnger(v){
-  $('#meterFill').style.width=v+'%';$('#angerNum').textContent=v+'%';
-  $('#face').textContent=v>80?'😡':v>55?'😤':v>30?'😒':v>5?'🥺':'🥰';
-  const f=$('#face');f.classList.remove('bump');void f.offsetWidth;f.classList.add('bump');
-}
-function modal(o){
-  $('#mEmoji').textContent=o.emoji;$('#mTitle').textContent=o.title;$('#mText').textContent=o.text;
-  const box=$('#mBtns');box.innerHTML='';
-  o.buttons.forEach(b=>{
-    const el=document.createElement('button');el.className='btn '+(b.cls||'');el.textContent=b.label;
-    el.onclick=()=>{$('#modal').classList.remove('show');sfx.tap();b.fn&&b.fn()};
-    box.appendChild(el);
-  });
-  $('#modal').classList.add('show');
-}
-function stamp(text,cb){
-  const s=$('#stamp');s.textContent=text;s.classList.remove('go');void s.offsetWidth;s.classList.add('go');
-  sfx.win();burst(innerWidth/2,innerHeight*.42,34);
-  setTimeout(()=>{s.classList.remove('go');cb&&cb()},1300);
-}
-function popText(arena,x,y,text){
-  const p=document.createElement('div');p.className='pop';p.textContent=text;
-  p.style.left=x+'px';p.style.top=y+'px';arena.appendChild(p);
-  setTimeout(()=>p.remove(),850);
-}
-function shakeEl(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake')}
-function relPos(arena,e){const r=arena.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
-
-/* ---------- 標題 / 罪狀 ---------- */
-$('#dogTap').onclick=e=>{
-  sfx.bark();burst(e.clientX,e.clientY,10,['💗','🐾','✨']);
-  const t=document.createElement('div');t.className='pop';t.style.cssText='position:fixed;z-index:80;left:'+e.clientX+'px;top:'+(e.clientY-30)+'px';
-  t.textContent=['汪！對不起！','汪汪！我錯了！','嗚嗚～原諒我'][Math.random()*3|0];
-  document.body.appendChild(t);setTimeout(()=>t.remove(),850);
-};
-$('#startBtn').onclick=()=>{sfx.tap();setAnger(100);go('s-crimes')};
-$('#crimeBtn').onclick=()=>{sfx.tap();startL1()};
-
-/* ---------- 第一關：追蹤 ---------- */
-const l1={goal:15,score:0,left:30,timer:null,spawner:null,running:false};
-function updateL1(){$('#l1s').textContent=l1.score;$('#l1t').textContent=l1.left}
-function startL1(){
-  go('s-l1');l1.score=0;l1.left=30;l1.running=true;updateL1();
-  const a=$('#arena1');a.querySelectorAll('.drop,.pop').forEach(e=>e.remove());
-  clearInterval(l1.timer);clearInterval(l1.spawner);
-  l1.timer=setInterval(()=>{l1.left--;updateL1();if(l1.left<=0)endL1(false)},1000);
-  l1.spawner=setInterval(spawnDrop,520);spawnDrop();
-}
-function spawnDrop(){
-  if(!l1.running)return;
-  const a=$('#arena1'),r=Math.random(),type=r<.18?'bad':r<.27?'gold':'good';
-  const el=document.createElement('button');el.type='button';el.className='drop '+type;
-  el.innerHTML=type==='bad'?'💔<small>退追</small>':type==='gold'?'💖<small>+3</small>':'❤<small>追蹤</small>';
-  el.style.left=Math.max(0,Math.random()*(a.clientWidth-70))+'px';
-  el.style.setProperty('--h',(a.clientHeight+130)+'px');
-  el.style.animationDuration=(2.4+Math.random()*1.6)+'s';
-  el.addEventListener('pointerdown',e=>{e.preventDefault();hitDrop(a,el,type,e)});
-  el.addEventListener('animationend',()=>el.remove());
-  a.appendChild(el);
-}
-function hitDrop(a,el,type,e){
-  if(!l1.running||!el.isConnected)return;
-  const p=relPos(a,e);el.remove();
-  if(type==='bad'){
-    l1.score=Math.max(0,l1.score-2);sfx.bad();shakeEl(a);popText(a,p.x,p.y,'退追炸彈 -2 💥');
-  }else{
-    const g=type==='gold'?3:1;l1.score+=g;sfx.pop();popText(a,p.x,p.y,'+'+g);burst(e.clientX,e.clientY,g===3?16:7);
+    el.addEventListener('click', ()=> popHeart(el));
   }
-  updateL1();if(l1.score>=l1.goal)endL1(true);
-}
-function endL1(win){
-  if(!l1.running)return;l1.running=false;
-  clearInterval(l1.timer);clearInterval(l1.spawner);
-  $('#arena1').querySelectorAll('.drop').forEach(e=>e.remove());
-  if(win){
-    stamp('追蹤成功！',()=>{
-      setAnger(70);
-      modal({emoji:'🐷',title:'追蹤成功 ✅',text:'莊小胖：哼，追蹤回來就想沒事？還有兩件事沒算。',buttons:[{label:'下一關 →',fn:startL2}]});
+
+  function popHeart(el){
+    if(!el.parentNode) return;
+    const rect = el.getBoundingClientRect();
+    score++;
+    scoreEl.textContent = score;
+
+    const msg = document.createElement('div');
+    msg.className = 'float-msg';
+    msg.textContent = sweetLines[Math.floor(Math.random()*sweetLines.length)];
+    msg.style.left = rect.left + 'px';
+    msg.style.top = rect.top + 'px';
+    document.body.appendChild(msg);
+    setTimeout(()=> msg.remove(), 1500);
+
+    el.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+    el.style.transform += ' scale(1.6)';
+    el.style.opacity = '0';
+    setTimeout(()=> el.remove(), 200);
+
+    if(score >= winScore){
+      finishGame();
+    }
+  }
+
+  function finishGame(){
+    playing = false;
+    clearInterval(spawnTimer);
+    document.querySelectorAll('.heart').forEach(h=>h.remove());
+    endingMsg.textContent = `${nameHer},${nameMe}永遠愛你 ❤️`;
+    ending.style.display = 'flex';
+  }
+
+  function startGame(){
+    startScreen.style.display = 'none';
+    hud.style.display = 'flex';
+    ending.style.display = 'none';
+    score = 0;
+    scoreEl.textContent = 0;
+    playing = true;
+    spawnTimer = setInterval(spawnHeart, 550);
+  }
+
+  startBtn.addEventListener('click', startGame);
+  replayBtn.addEventListener('click', startGame);
+
+  // ------- 滑鼠愛心軌跡 -------
+  const canvas = document.getElementById('trail');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resize(){
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W; canvas.height = H;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  let trailParticles = [];
+  function addTrail(x,y){
+    trailParticles.push({
+      x, y,
+      vx:(Math.random()-0.5)*0.6,
+      vy:-0.6 - Math.random()*0.6,
+      life:1,
+      size:8 + Math.random()*8
     });
-  }else{
-    sfx.bad();
-    modal({emoji:'⏱',title:'時間到！',text:'莊小胖：手速這麼慢，是不是又在按退追？再來一次！',buttons:[{label:'再試一次 💪',fn:startL1}]});
+    if(trailParticles.length > 80) trailParticles.shift();
   }
-}
+  window.addEventListener('mousemove', e=> addTrail(e.clientX, e.clientY));
+  window.addEventListener('touchmove', e=>{
+    if(e.touches[0]) addTrail(e.touches[0].clientX, e.touches[0].clientY);
+  }, {passive:true});
 
-/* ---------- 第二關：粉絲 ----------*/
-const FANS=['🐷','🐷','🐷','🐷','🐶','🐶','🐶','🐶'];
-const l2={fans:[],caught:0,left:35,raf:0,timer:null,last:0,running:false};
-function updateL2(){$('#l2s').textContent=l2.caught;$('#l2t').textContent=l2.left}
-function placeFan(f){f.el.style.transform='translate('+f.x+'px,'+f.y+'px)'}
-function startL2(){
-  go('s-l2');const a=$('#arena2');
-  a.querySelectorAll('.fan,.pop').forEach(e=>e.remove());
-  l2.caught=0;l2.left=35;l2.running=true;l2.fans=[];
-  const W=a.clientWidth-56,H=a.clientHeight-56-60;
-  FANS.forEach(c=>{
-    const el=document.createElement('button');el.type='button';el.className='fan';el.textContent=c;a.appendChild(el);
-    const f={el:el,x:Math.random()*W,y:Math.random()*H,vx:(Math.random()<.5?-1:1)*(80+Math.random()*60),vy:(Math.random()<.5?-1:1)*(80+Math.random()*60),caught:false};
-    el.addEventListener('pointerdown',e=>{e.preventDefault();catchFan(a,f,e)});
-    l2.fans.push(f);placeFan(f);
-  });
-  updateL2();clearInterval(l2.timer);
-  l2.timer=setInterval(()=>{l2.left--;updateL2();if(l2.left<=0)endL2(false)},1000);
-  l2.last=performance.now();cancelAnimationFrame(l2.raf);l2.raf=requestAnimationFrame(tick2);
-}
-function tick2(now){
-  if(!l2.running)return;
-  const a=$('#arena2'),dt=Math.min(.05,(now-l2.last)/1000);l2.last=now;
-  const W=a.clientWidth-56,H=a.clientHeight-56-60,k=1+l2.caught*.18;
-  for(const f of l2.fans){
-    if(f.caught)continue;
-    f.x+=f.vx*k*dt;f.y+=f.vy*k*dt;
-    if(f.x<0){f.x=0;f.vx=Math.abs(f.vx)}if(f.x>W){f.x=W;f.vx=-Math.abs(f.vx)}
-    if(f.y<0){f.y=0;f.vy=Math.abs(f.vy)}if(f.y>H){f.y=H;f.vy=-Math.abs(f.vy)}
-    if(Math.random()<.008){f.vx=-f.vx}
-    placeFan(f);
+  function drawHeart(x,y,size,alpha){
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(x,y);
+    ctx.scale(size/20, size/20);
+    ctx.beginPath();
+    ctx.moveTo(0,4);
+    ctx.bezierCurveTo(0,-2,-10,-2,-10,5);
+    ctx.bezierCurveTo(-10,12,0,16,0,20);
+    ctx.bezierCurveTo(0,16,10,12,10,5);
+    ctx.bezierCurveTo(10,-2,0,-2,0,4);
+    ctx.fillStyle = '#ff4d79';
+    ctx.fill();
+    ctx.restore();
   }
-  l2.raf=requestAnimationFrame(tick2);
-}
-function catchFan(a,f,e){
-  if(!l2.running||f.caught)return;
-  f.caught=true;l2.caught++;updateL2();sfx.pop();
-  const p=relPos(a,e);popText(a,p.x,p.y,'回家啦 🏠');burst(e.clientX,e.clientY,8,['✨','💗','⭐']);
-  f.el.style.transition='transform .55s cubic-bezier(.5,-.3,.6,1)';
-  f.el.style.transform='translate('+(a.clientWidth/2-28)+'px,'+(a.clientHeight-62)+'px) scale(.45)';
-  setTimeout(()=>{f.el.remove();const b=$('#basket');b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')},560);
-  if(l2.caught>=FANS.length)endL2(true);
-}
-function endL2(win){
-  if(!l2.running)return;l2.running=false;clearInterval(l2.timer);cancelAnimationFrame(l2.raf);
-  if(win){
-    stamp('粉絲全回家！',()=>{
-      setAnger(40);
-      modal({emoji:'🐷',title:'粉絲團重新集合 🏠',text:'莊小胖：粉絲是回來了…但你還欠我一個關於「物理」的解釋。',buttons:[{label:'進入物理小考 →',fn:startL3}]});
+
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    trailParticles.forEach(p=>{
+      p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+      drawHeart(p.x, p.y, p.size * p.life, Math.max(p.life,0)*0.7);
     });
-  }else{
-    sfx.bad();
-    modal({emoji:'💨',title:'粉絲跑光了！',text:'粉絲團：我們不想再被搬家了…但看在你這麼努力的份上，再抓一次吧。',buttons:[{label:'再抓一次 🏃',fn:startL2}]});
+    trailParticles = trailParticles.filter(p=>p.life > 0);
+    requestAnimationFrame(loop);
   }
-}
-
-/* ---------- 第三關：物理小考 ---------- */
-const QUIZ=[
-  {q:'請問：物理簡單嗎？',o:[
-    ['物理超簡單 小事一件 ',0,'死肥豬又在白目'],
-    ['超難！莊小胖能學好物理 真的太強了 ',1,'✅ 答對！物理最難的，是莊小胖認真的樣子。'],
-    ['物理可以吃嗎？',0,'🍽 死胖子只想著吃。']]},
-  {q:'F = ma。如果奕瑄狗狗的「愧疚」質量很大，加速度也很大，會產生什麼？',o:[
-    ['直接撞進莊小胖心裡讓小胖暈船 ',1,'✅ 完全正確！這題你懂了。'],
-    ['一隻在地上滑倒的肥豬 ',0,'地震了啦番仔'],
-    ['沒事 繼續嘴硬',0,'你可以試試看^']]},
-  {q:'牛頓第三定律：你嘲諷莊小胖，她的「反作用力」是什麼？',o:[
-    ['她笑著說沒關係 ',0,'太天真了 肚子大大腦袋空空'],
-    ['她氣氣的 而且完全合理 ',1,'✅ 答對！反作用力等大反向，你自己想想。'],
-    ['反作用力不存在 只有我是對的',0,'這句話已被莊小胖記錄在案。']]},
-  {q:'面對莊小胖，最有效率的道歉方式是？',o:[
-    ['傳個貼圖就好',0,'死肥豬你敢敷衍就死定了'],
-    ['假裝什麼事都沒發生',0,'你喔可以試試看^^'],
-    ['認真認錯 賣萌撒嬌 ',1,'✅ 滿分！這才是正確答案。']]}
-];
-let qi=0;
-function startL3(){go('s-l3');qi=0;renderQ()}
-function renderQ(){
-  const d=QUIZ[qi];
-  $('#qNo').textContent='第 '+(qi+1)+' / '+QUIZ.length+' 題';
-  $('#qText').textContent=d.q;$('#qMsg').textContent='莊小胖正在盯著你…👀';
-  const box=$('#qOpts');box.innerHTML='';
-  shuffle(d.o.slice()).forEach(o=>{
-    const b=document.createElement('button');b.type='button';b.className='opt';b.textContent=o[0];
-    b.onclick=()=>answer(b,o);box.appendChild(b);
-  });
-  $('#qDots').innerHTML=QUIZ.map((_,i)=>'<span class="'+(i<qi?'on':'')+'"></span>').join('');
-}
-function answer(b,o){
-  $('#qMsg').textContent=o[2];
-  if(o[1]){
-    sfx.pop();b.classList.add('ok');
-    document.querySelectorAll('#qOpts .opt').forEach(x=>x.disabled=true);
-    const r=b.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,16);
-    setTimeout(()=>{qi++;if(qi>=QUIZ.length)endL3();else renderQ()},1300);
-  }else{
-    sfx.bad();b.disabled=true;b.classList.add('no');shakeEl(b);
-  }
-}
-function endL3(){
-  $('#qDots').innerHTML=QUIZ.map(()=>'<span class="on"></span>').join('');
-  stamp('物理滿分！',()=>{
-    setAnger(15);
-    modal({emoji:'🐷',title:'物理小考滿分 💯',text:'莊小胖：好啦，算你有悟出來。最後一關，別想逃。',buttons:[{label:'前往最終關 →',fn:startL4}]});
-  });
-}
-
-/* ---------- 最終關：原諒判決 ---------- */
- let dodge=0;
-const NO_LINES=[
-  '咦？「不原諒」剛剛自己跑掉了 🏃',
-  '手滑了吧？再按一次看看。',
-  '系統通知：不原諒按鈕正在維修中 🔧',
-  '按鈕說它被奕瑄狗狗的可愛眼神擊中了 🥺',
-  '最後警告：再按下去，按鈕要被沒收囉。',
-];
-function startL4(){
-  go('s-l4');dodge=0;
-  const yes=$('#yesBtn'),no=$('#noBtn');
-  yes.style.transform='scale(1)';no.style.display='';
-  no.style.left='auto';no.style.right='10px';no.style.top='10px';no.style.transform='scale(1)';
-  $('#bossMsg').textContent='莊小胖大法官，請做出最終判決 ⚖';
-}
-function dodgeNo(e){
-  e.preventDefault();e.stopPropagation();
-  const yes=$('#yesBtn'),no=$('#noBtn'),a=$('#bossArena');
-  dodge++;tone(300+dodge*60,.1,'square',.05);
-  if(dodge>=6){
-    no.style.display='none';yes.style.transform='scale(1.6)';
-    $('#bossMsg').textContent='🚔 「不原諒」按鈕已被沒收（罪名：明明很可愛卻想裝兇）';
-    sfx.win();return;
-  }
-  const maxX=Math.max(0,a.clientWidth-no.offsetWidth-8),maxY=Math.max(0,a.clientHeight-no.offsetHeight-8);
-  no.style.right='auto';no.style.left=Math.random()*maxX+'px';no.style.top=Math.random()*maxY+'px';
-  no.style.transform='scale('+(1-dodge*.1)+')';
-  yes.style.transform='scale('+(1+dodge*.13)+')';
-  $('#bossMsg').textContent=NO_LINES[dodge-1];
-}
-$('#noBtn').addEventListener('pointerdown',dodgeNo);
-$('#noBtn').addEventListener('pointerenter',e=>{if(e.pointerType==='mouse')dodgeNo(e)});
-$('#noBtn').addEventListener('click',e=>e.preventDefault());
-$('#yesBtn').onclick=()=>{
-  stamp('原諒成功！！',()=>{setAnger(0);startEnd()});
-};
-
-/* ---------- 結局 ---------- */
-const LETTER=`莊小胖：
-
-對不起。
-
-我不應該退追你 那個動作一點都不可愛 還很欠揍 
-我不應該把粉絲移 你在我心裡是第一名 不是可以隨便搬來搬去的東西（畢竟是小胖）
-我更不應該說物理簡單嘲諷你 物理一點都不簡單 我只是想跟你鬧著玩 你認真的樣子我都看在眼裡 我應該為你加油打氣才對
-
-謝謝你每次都願意等我長大一點點 不是長胖
-這次我學到了 以後會先想再開口 也不會再讓你感覺我在嘲諷你
-我承認肚子大大腦袋空空還會亂大便 這些都算了但我長得像馬大便還很臭
-
-可以原諒奕瑄狗狗嗎？🥺
-
-——愛你的奕瑄狗狗 🐶💗`;
-let typer=null,hugs=0;
-function startEnd(){
-  go('s-end');rain(4200);
-  const live=$('#live'),ghost=$('#ghost'),box=$('#letter');
-  ghost.textContent=LETTER;live.textContent='';box.classList.remove('done');
-  $('#afterLetter').classList.remove('show');
-  let i=0;clearInterval(typer);
-  function finish(){
-    clearInterval(typer);live.textContent=LETTER;box.classList.add('done');
-    $('#afterLetter').classList.add('show');
-  }
-  typer=setInterval(()=>{live.textContent=LETTER.slice(0,++i);if(i%3===0)tone(880+Math.random()*200,.03,'triangle',.02);if(i>=LETTER.length)finish()},42);
-  box.onclick=finish;
-}
-document.querySelectorAll('.coupon').forEach(c=>c.onclick=e=>{
-  c.classList.toggle('open');sfx.pop();burst(e.clientX,e.clientY,10);
-});
-$('#hugBtn').onclick=e=>{
-  hugs++;$('#hugCount').textContent='已經抱抱 '+hugs+' 次（上限：無限）';
-  sfx.pop();burst(e.clientX,e.clientY,14,['💗','🫂','💖','🐶','🐷']);
-};
-$('#replayBtn').onclick=()=>{sfx.tap();clearInterval(typer);hugs=0;$('#hugCount').textContent='已經抱抱 0 次（上限：無限）';setAnger(100);go('s-title')};
+  loop();
 })();
 </script>
+
 </body>
 </html>
