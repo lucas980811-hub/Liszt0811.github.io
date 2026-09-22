@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>臭狗  ❤  昀庭主人</title>
+<title>臭狗 ❤ 莊小胖</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -194,7 +194,7 @@
 <div id="app">
 
   <section class="scene active" id="scene-start">
-    <p class="brand" id="startBrand">臭狗 ❤ 昀庭主人</p>
+    <p class="brand" id="startBrand">臭狗 ❤ 莊小胖</p>
     <p class="sub">準備好了嗎?這是一趟只有我們兩個看得懂的小旅程</p>
     <button class="cta" id="btnStart">開始這趟旅程</button>
   </section>
@@ -242,15 +242,15 @@
   /* =========================================================
      改這裡就好:名字 / 在一起的日期 / 目標分數
   ========================================================= */
-  const HER_NAMES = ['莊小胖','昀庭主人'];
-  const ME_NAMES  = ['臭狗','肥豬'];
+  const HER_NAMES = ['昀庭主人'];
+  const ME_NAMES  = ['臭狗'];
   const START_DATE = '2025-04-23';   // 改成你們在一起的日期
   const CATCH_TARGET = 18;
   /* ========================================================= */
 
   function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-  const sheFixed = 肥豬
-  const meFixed  = 昀庭主人
+  const sheFixed = pick(HER_NAMES);
+  const meFixed  = pick(ME_NAMES);
   document.getElementById('startBrand').textContent = `${meFixed} ❤ ${sheFixed}`;
   document.getElementById('badge').innerHTML = `${meFixed} <b>❤</b> ${sheFixed}`;
 
@@ -395,9 +395,9 @@
      Scene 2 -> 心動選擇小測驗
   ========================================================= */
   const quizQuestions = [
-    { q:'我們最常一起做的事情是?', opts:['追劇不理黃奕瑄','一起睡覺','吵架吵到到笑出來','戳肚臍'] },
-    { q:'如果現在能送對方一個東西,你會選?', opts:['一個大抱抱','宵夜一份','親親一個','暴揍黃奕瑄'] },
-    { q:'此刻最想跟對方說的一句話?', opts:['沒把你雞雞切掉就不錯了','辛苦了','你最棒了','抱我一下'] }
+    { q:'我們最常一起做的事情是?', opts:['追劇不理黃奕瑄','一起耍廢躺平','吵架吵到到笑出來','戳肚臍'] },
+    { q:'如果現在能送對方一個東西,你會選?', opts:['沒切你雞雞就不錯了','宵夜一份','親親一個','暴揍黃奕瑄'] },
+    { q:'此刻最想跟對方說的一句話?', opts:['滾啦死胖子','辛苦了','你最棒了','抱我一下'] }
   ];
   const quizReplies = () => [
     `這就是${meFixed}喜歡${sheFixed}的原因 ❤`,
