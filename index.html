@@ -3,276 +3,682 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>臭狗 ❤️ 小胖主人</title>
+<title>臭狗 ❤ 莊小胖</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+TC:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --pink1:#fff0f5;
-    --pink2:#ffd6e8;
-    --rose:#ff4d79;
-    --plum:#9d4edd;
+    --pink2:#ffe1ec;
+    --lav:#f3e8ff;
+    --rose:#ff5d8f;
+    --rose-deep:#e0356e;
+    --plum:#9d6ede;
     --text:#5a3a4a;
+    --card-back: linear-gradient(135deg,#ff9fc0,#c9a3f0);
   }
   *{ box-sizing:border-box; }
   html,body{
     margin:0; padding:0; width:100%; height:100%;
-    background:linear-gradient(160deg, var(--pink1), #f3e8ff 70%);
+    background:linear-gradient(160deg, var(--pink1) 0%, var(--pink2) 45%, var(--lav) 100%);
     overflow:hidden;
     font-family:'Noto Sans TC', sans-serif;
     color:var(--text);
   }
-  #trail{ position:fixed; inset:0; pointer-events:none; z-index:5; }
 
-  .screen{
-    position:fixed; inset:0; display:flex; flex-direction:column;
-    align-items:center; justify-content:center; text-align:center;
-    z-index:10;
+  #bgHearts, #trail{
+    position:fixed; inset:0; z-index:1; pointer-events:none;
   }
+  #trail{ z-index:3; }
+
+  #badge{
+    position:fixed; top:16px; left:18px; z-index:20;
+    font-size:13px; background:rgba(255,255,255,0.55);
+    padding:6px 14px; border-radius:999px; backdrop-filter:blur(6px);
+    box-shadow:0 4px 14px rgba(224,53,110,0.12);
+  }
+  #badge b{ color:var(--rose-deep); }
+
+  #dots{
+    position:fixed; top:18px; left:50%; transform:translateX(-50%);
+    display:flex; gap:8px; z-index:20; opacity:0; pointer-events:none;
+    transition:opacity 0.4s ease;
+  }
+  #dots.show{ opacity:1; }
+  #dots span{
+    width:8px; height:8px; border-radius:50%; background:rgba(224,53,110,0.25);
+    transition:background 0.3s ease, transform 0.3s ease;
+  }
+  #dots span.active{ background:var(--rose); transform:scale(1.3); }
+
+  #app{ position:relative; width:100%; height:100%; z-index:10; }
+
+  .scene{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center;
+    padding:70px 20px 30px; opacity:0; pointer-events:none;
+    transition:opacity 0.5s ease;
+  }
+  .scene.active{ opacity:1; pointer-events:auto; }
+
   .brand{
     font-family:'Zhi Mang Xing', cursive;
-    font-size:44px; color:var(--rose); margin:0 0 6px;
+    font-size:clamp(32px,7vw,52px); color:var(--rose-deep); margin:0 0 8px;
   }
-  .sub{ font-size:14px; color:var(--text); opacity:0.75; margin:0 0 26px; }
+  .sub{ font-size:14px; opacity:0.75; margin:0 0 30px; max-width:320px; line-height:1.7; }
+  .tiny{ font-size:12px; opacity:0.55; margin-top:16px; }
 
   button.cta{
-    padding:12px 34px; border-radius:999px; border:none;
-    background:var(--rose); color:#fff; font-size:16px;
-    font-family:inherit; cursor:pointer; box-shadow:0 8px 20px rgba(255,77,121,0.35);
-    transition:transform 0.15s ease;
+    padding:13px 36px; border-radius:999px; border:none;
+    background:var(--rose); color:#fff; font-size:16px; font-weight:600;
+    font-family:inherit; cursor:pointer;
+    box-shadow:0 10px 22px rgba(255,93,143,0.35);
+    transition:transform 0.15s ease, box-shadow 0.15s ease;
   }
-  button.cta:hover{ transform:translateY(-2px); }
+  button.cta:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(255,93,143,0.45); }
+  button.cta:active{ transform:translateY(0); }
   button.cta:focus-visible{ outline:2px solid var(--plum); outline-offset:3px; }
-
-  #hud{
-    position:fixed; top:20px; left:0; right:0; z-index:8;
-    display:flex; justify-content:center; align-items:center; gap:8px;
-    font-size:15px; pointer-events:none;
-  }
-  #hud span{ font-weight:600; color:var(--rose); }
-
-  .heart{
-    position:absolute; font-size:30px; cursor:pointer;
-    user-select:none; z-index:6; line-height:1;
-    filter:drop-shadow(0 4px 8px rgba(255,77,121,0.25));
+  button.cta.ghost{
+    background:transparent; color:var(--rose-deep);
+    border:1.5px solid var(--rose); box-shadow:none;
   }
 
-  .float-msg{
-    position:fixed; z-index:9; font-size:14px; color:var(--rose);
-    font-weight:600; pointer-events:none; white-space:nowrap;
-    animation:floatUp 1.4s ease forwards;
+  /* ---- quiz ---- */
+  .quiz-box{ width:100%; max-width:400px; }
+  .quiz-q{ font-size:18px; font-weight:600; margin-bottom:20px; min-height:52px; line-height:1.6; }
+  .quiz-opts{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .quiz-opt{
+    padding:14px 10px; border-radius:14px; border:1.5px solid rgba(224,53,110,0.25);
+    background:rgba(255,255,255,0.6); font-family:inherit; font-size:13.5px;
+    color:var(--text); cursor:pointer; transition:all 0.15s ease;
   }
-  @keyframes floatUp{
-    0%{ opacity:0; transform:translateY(0); }
-    15%{ opacity:1; }
-    100%{ opacity:0; transform:translateY(-60px); }
+  .quiz-opt:hover{ background:#fff; border-color:var(--rose); }
+  .quiz-opt:focus-visible{ outline:2px solid var(--plum); outline-offset:2px; }
+  .quiz-opt.picked{ background:var(--rose); color:#fff; border-color:var(--rose); }
+  .quiz-reply{
+    margin-top:22px; font-size:15px; color:var(--rose-deep); font-weight:600;
+    min-height:24px; opacity:0; transition:opacity 0.4s ease;
   }
+  .quiz-reply.show{ opacity:1; }
 
-  #ending{
-    position:fixed; inset:0; z-index:20; display:none;
-    align-items:center; justify-content:center; flex-direction:column;
-    background:linear-gradient(160deg, #ffe3ee, #efe0ff);
-    text-align:center; padding:20px;
+  /* ---- catch game ---- */
+  #catchArea{ position:relative; width:100%; height:100%; }
+  .meter-wrap{
+    position:absolute; top:20px; left:50%; transform:translateX(-50%);
+    width:min(320px,80vw); z-index:2;
   }
-  #ending .msg{
-    font-family:'Zhi Mang Xing', cursive;
-    font-size:34px; color:var(--rose); max-width:480px; line-height:1.6;
-    margin-bottom:22px;
+  .meter-label{ font-size:12.5px; margin-bottom:6px; opacity:0.75; }
+  .meter-track{
+    width:100%; height:10px; border-radius:999px; background:rgba(224,53,110,0.15);
+    overflow:hidden;
   }
-  #ending button{
-    margin-top:6px; background:transparent; border:1.5px solid var(--rose);
-    color:var(--rose); padding:9px 26px; border-radius:999px;
-    font-family:inherit; font-size:14px; cursor:pointer;
+  .meter-fill{
+    height:100%; width:0%; border-radius:999px;
+    background:linear-gradient(90deg,var(--rose),var(--plum));
+    transition:width 0.25s ease;
   }
+  .catch-heart{
+    position:absolute; font-size:26px; cursor:pointer; user-select:none;
+    filter:drop-shadow(0 3px 6px rgba(255,93,143,0.3));
+  }
+  .catch-hint{ position:absolute; bottom:18px; width:100%; font-size:12.5px; opacity:0.6; }
 
-  #hidden{ display:none; }
+  /* ---- match game ---- */
+  .match-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:10px;
+    width:min(320px,84vw);
+  }
+  .card{
+    aspect-ratio:1/1.15; perspective:600px; cursor:pointer;
+  }
+  .card-inner{
+    position:relative; width:100%; height:100%; transition:transform 0.5s;
+    transform-style:preserve-3d;
+  }
+  .card.flipped .card-inner{ transform:rotateY(180deg); }
+  .card.matched .card-inner{ transform:rotateY(180deg); opacity:0.55; }
+  .card-face{
+    position:absolute; inset:0; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    backface-visibility:hidden; font-size:24px;
+  }
+  .card-front{ background:var(--card-back); }
+  .card-front::after{ content:'❤'; color:rgba(255,255,255,0.55); font-size:18px; }
+  .card-back{ background:#fff; transform:rotateY(180deg); box-shadow:0 4px 12px rgba(157,110,222,0.2); }
+  .match-status{ margin-top:18px; font-size:13px; opacity:0.7; }
 
+  /* ---- letter ---- */
+  .letter-box{
+    max-width:420px; width:100%;
+    background:rgba(255,255,255,0.6); border-radius:20px;
+    padding:30px 26px; backdrop-filter:blur(6px);
+    box-shadow:0 20px 50px rgba(224,53,110,0.15);
+  }
+  .letter-days{ font-size:13px; color:var(--rose-deep); margin-bottom:14px; font-weight:600; }
+  .letter-text{
+    font-size:15px; line-height:2; text-align:left; white-space:pre-wrap;
+    min-height:180px;
+  }
+  .letter-caret{ display:inline-block; width:2px; background:var(--rose-deep); animation:blink 0.9s infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+  .final-heart{
+    font-size:0; margin-top:10px; opacity:0; transition:opacity 0.6s ease;
+  }
+  .final-heart.show{ opacity:1; font-size:56px; }
+  .final-title{
+    font-family:'Zhi Mang Xing', cursive; font-size:26px; color:var(--rose-deep);
+    margin-top:6px; opacity:0; transition:opacity 0.6s ease;
+  }
+  .final-title.show{ opacity:1; }
+
+  #confetti{ position:fixed; inset:0; z-index:30; pointer-events:none; }
+
+  @media (max-width:420px){
+    .quiz-opts{ grid-template-columns:1fr 1fr; }
+  }
   @media (prefers-reduced-motion: reduce){
-    .float-msg{ animation:none; }
+    .card-inner, button.cta, .scene{ transition:none; }
   }
 </style>
 </head>
 <body>
 
+<canvas id="bgHearts"></canvas>
 <canvas id="trail"></canvas>
+<canvas id="confetti"></canvas>
 
-<div id="hud" class="hidden" style="display:none;">收集了 <span id="score">0</span> 顆 ❤️</div>
+<div id="badge">臭狗 <b>❤</b> 莊小胖</div>
+<div id="dots"><span></span><span></span><span></span><span></span></div>
 
-<div class="screen" id="startScreen">
-  <p class="brand">臭狗 ❤️ 小胖主人</p>
-  <p class="sub">接住愛心,給你一個驚喜</p>
-  <button class="cta" id="startBtn">點我開始</button>
-</div>
+<div id="app">
 
-<div id="ending">
-  <div class="msg" id="endingMsg"></div>
-  <button id="replayBtn">再玩一次</button>
+  <section class="scene active" id="scene-start">
+    <p class="brand" id="startBrand">臭狗 ❤ 莊小胖</p>
+    <p class="sub">準備好了嗎?這是一趟只有我們兩個看得懂的小旅程</p>
+    <button class="cta" id="btnStart">開始這趟旅程</button>
+  </section>
+
+  <section class="scene" id="scene-quiz">
+    <div class="quiz-box">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-opts" id="quizOpts"></div>
+      <div class="quiz-reply" id="quizReply"></div>
+    </div>
+  </section>
+
+  <section class="scene" id="scene-catch">
+    <div id="catchArea">
+      <div class="meter-wrap">
+        <div class="meter-label" id="catchLabel">接住 <b>0</b> / <b>18</b> 顆心</div>
+        <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+      </div>
+      <div class="catch-hint">點擊掉下來的愛心,把它們都接住</div>
+    </div>
+  </section>
+
+  <section class="scene" id="scene-match">
+    <p class="sub" style="margin-bottom:16px;">翻開卡片,找出每一對顏色一樣的心</p>
+    <div class="match-grid" id="matchGrid"></div>
+    <div class="match-status" id="matchStatus">配對 0 / 6</div>
+  </section>
+
+  <section class="scene" id="scene-letter">
+    <div class="letter-box">
+      <div class="letter-days" id="letterDays"></div>
+      <div class="letter-text" id="letterText"></div>
+      <div class="final-heart" id="finalHeart">❤</div>
+      <div class="final-title" id="finalTitle"></div>
+    </div>
+    <button class="cta ghost" id="btnReplay" style="margin-top:22px; display:none;">重新玩一次</button>
+  </section>
+
 </div>
 
 <script>
 (function(){
   "use strict";
 
-  // ------- 改名字改這裡就好 -------
-  const nameHer = "小胖主人";
-  const nameMe  = "臭狗";
-  const winScore = 15;
-  // --------------------------------
+  /* =========================================================
+     改這裡就好:名字 / 在一起的日期 / 目標分數
+  ========================================================= */
+  const HER_NAMES = ['莊小胖','昀庭主人'];
+  const ME_NAMES  = ['臭狗','肥豬'];
+  const START_DATE = '2025-04-23';   // 改成你們在一起的日期
+  const CATCH_TARGET = 18;
+  /* ========================================================= */
 
-  const sweetLines = [
-    `想到${nameHer}就笑了 ❤️`,
-    `${nameMe}最愛${nameHer} ❤️`,
-    `抱抱 ❤️`,
-    `今天也要笑笑的 ❤️`,
-    `每天都想見到你 ❤️`,
-    `你是全世界 ❤️`,
-    `再靠近一點點 ❤️`
-  ];
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  const sheFixed = pick(HER_NAMES);
+  const meFixed  = pick(ME_NAMES);
+  document.getElementById('startBrand').textContent = `${meFixed} ❤ ${sheFixed}`;
+  document.getElementById('badge').innerHTML = `${meFixed} <b>❤</b> ${sheFixed}`;
 
-  const startScreen = document.getElementById('startScreen');
-  const startBtn = document.getElementById('startBtn');
-  const hud = document.getElementById('hud');
-  const scoreEl = document.getElementById('score');
-  const ending = document.getElementById('ending');
-  const endingMsg = document.getElementById('endingMsg');
-  const replayBtn = document.getElementById('replayBtn');
+  /* ---------------- scene control ---------------- */
+  const scenes = ['scene-start','scene-quiz','scene-catch','scene-match','scene-letter'];
+  const dotsEl = document.getElementById('dots');
+  const dotSpans = dotsEl.querySelectorAll('span');
 
-  let score = 0;
-  let spawnTimer = null;
-  let playing = false;
-
-  function randomBetween(a,b){ return a + Math.random()*(b-a); }
-
-  function spawnHeart(){
-    if(!playing) return;
-    const el = document.createElement('div');
-    el.className = 'heart';
-    el.textContent = '❤️';
-    const x = randomBetween(6, 94);
-    const size = randomBetween(22, 38);
-    el.style.left = x + 'vw';
-    el.style.top = '105vh';
-    el.style.fontSize = size + 'px';
-    document.body.appendChild(el);
-
-    const duration = randomBetween(4200, 6800);
-    const drift = randomBetween(-40, 40);
-    const start = performance.now();
-
-    function animate(now){
-      const p = Math.min((now - start) / duration, 1);
-      el.style.transform = `translate(${drift * p}px, ${-p * (window.innerHeight + 200)}px) rotate(${p*20}deg)`;
-      el.style.opacity = 1 - p*0.15;
-      if(p < 1 && el.parentNode){
-        requestAnimationFrame(animate);
-      } else if(el.parentNode){
-        el.remove();
-      }
-    }
-    requestAnimationFrame(animate);
-
-    el.addEventListener('click', ()=> popHeart(el));
-  }
-
-  function popHeart(el){
-    if(!el.parentNode) return;
-    const rect = el.getBoundingClientRect();
-    score++;
-    scoreEl.textContent = score;
-
-    const msg = document.createElement('div');
-    msg.className = 'float-msg';
-    msg.textContent = sweetLines[Math.floor(Math.random()*sweetLines.length)];
-    msg.style.left = rect.left + 'px';
-    msg.style.top = rect.top + 'px';
-    document.body.appendChild(msg);
-    setTimeout(()=> msg.remove(), 1500);
-
-    el.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
-    el.style.transform += ' scale(1.6)';
-    el.style.opacity = '0';
-    setTimeout(()=> el.remove(), 200);
-
-    if(score >= winScore){
-      finishGame();
+  function showScene(id){
+    scenes.forEach(s=> document.getElementById(s).classList.toggle('active', s===id));
+    if(id === 'scene-start'){
+      dotsEl.classList.remove('show');
+    } else {
+      dotsEl.classList.add('show');
+      const idx = scenes.indexOf(id) - 1;
+      dotSpans.forEach((d,i)=> d.classList.toggle('active', i===idx));
     }
   }
 
-  function finishGame(){
-    playing = false;
-    clearInterval(spawnTimer);
-    document.querySelectorAll('.heart').forEach(h=>h.remove());
-    endingMsg.textContent = `${nameHer},${nameMe}永遠愛你 ❤️`;
-    ending.style.display = 'flex';
-  }
+  /* ---------------- ambient background hearts ---------------- */
+  const bgCanvas = document.getElementById('bgHearts');
+  const bgCtx = bgCanvas.getContext('2d');
+  let bgW, bgH;
+  function resizeBg(){ bgW = bgCanvas.width = window.innerWidth; bgH = bgCanvas.height = window.innerHeight; }
+  window.addEventListener('resize', resizeBg);
+  resizeBg();
 
-  function startGame(){
-    startScreen.style.display = 'none';
-    hud.style.display = 'flex';
-    ending.style.display = 'none';
-    score = 0;
-    scoreEl.textContent = 0;
-    playing = true;
-    spawnTimer = setInterval(spawnHeart, 550);
-  }
-
-  startBtn.addEventListener('click', startGame);
-  replayBtn.addEventListener('click', startGame);
-
-  // ------- 滑鼠愛心軌跡 -------
-  const canvas = document.getElementById('trail');
-  const ctx = canvas.getContext('2d');
-  let W, H;
-  function resize(){
-    W = window.innerWidth; H = window.innerHeight;
-    canvas.width = W; canvas.height = H;
-  }
-  window.addEventListener('resize', resize);
-  resize();
-
-  let trailParticles = [];
-  function addTrail(x,y){
-    trailParticles.push({
-      x, y,
-      vx:(Math.random()-0.5)*0.6,
-      vy:-0.6 - Math.random()*0.6,
-      life:1,
-      size:8 + Math.random()*8
-    });
-    if(trailParticles.length > 80) trailParticles.shift();
-  }
-  window.addEventListener('mousemove', e=> addTrail(e.clientX, e.clientY));
-  window.addEventListener('touchmove', e=>{
-    if(e.touches[0]) addTrail(e.touches[0].clientX, e.touches[0].clientY);
-  }, {passive:true});
-
-  function drawHeart(x,y,size,alpha){
+  function drawHeartShape(ctx,x,y,size,alpha,color){
     ctx.save();
     ctx.globalAlpha = alpha;
     ctx.translate(x,y);
-    ctx.scale(size/20, size/20);
+    ctx.scale(size/20,size/20);
     ctx.beginPath();
     ctx.moveTo(0,4);
     ctx.bezierCurveTo(0,-2,-10,-2,-10,5);
     ctx.bezierCurveTo(-10,12,0,16,0,20);
     ctx.bezierCurveTo(0,16,10,12,10,5);
     ctx.bezierCurveTo(10,-2,0,-2,0,4);
-    ctx.fillStyle = '#ff4d79';
+    ctx.fillStyle = color;
     ctx.fill();
     ctx.restore();
   }
 
-  function loop(){
-    ctx.clearRect(0,0,W,H);
-    trailParticles.forEach(p=>{
-      p.x += p.vx; p.y += p.vy; p.life -= 0.02;
-      drawHeart(p.x, p.y, p.size * p.life, Math.max(p.life,0)*0.7);
+  let bgParticles = [];
+  function spawnBgHeart(){
+    bgParticles.push({
+      x: Math.random()*bgW, y: bgH + 20,
+      vy: -(0.3 + Math.random()*0.5),
+      vx: (Math.random()-0.5)*0.3,
+      size: 10 + Math.random()*14,
+      alpha: 0.12 + Math.random()*0.18,
+      color: Math.random() > 0.5 ? '#ff9fc0' : '#c9a3f0'
     });
-    trailParticles = trailParticles.filter(p=>p.life > 0);
-    requestAnimationFrame(loop);
+    if(bgParticles.length > 60) bgParticles.shift();
   }
-  loop();
+  setInterval(spawnBgHeart, 700);
+
+  function loopBg(){
+    bgCtx.clearRect(0,0,bgW,bgH);
+    bgParticles.forEach(p=>{
+      p.y += p.vy; p.x += p.vx;
+      drawHeartShape(bgCtx, p.x, p.y, p.size, p.alpha, p.color);
+    });
+    bgParticles = bgParticles.filter(p=> p.y > -30);
+    requestAnimationFrame(loopBg);
+  }
+  loopBg();
+
+  /* ---------------- cursor heart trail ---------------- */
+  const trailCanvas = document.getElementById('trail');
+  const trailCtx = trailCanvas.getContext('2d');
+  let tW, tH;
+  function resizeTrail(){ tW = trailCanvas.width = window.innerWidth; tH = trailCanvas.height = window.innerHeight; }
+  window.addEventListener('resize', resizeTrail);
+  resizeTrail();
+
+  let trailParticles = [];
+  function addTrail(x,y){
+    trailParticles.push({ x, y, vx:(Math.random()-0.5)*0.6, vy:-0.7-Math.random()*0.5, life:1, size:8+Math.random()*8 });
+    if(trailParticles.length > 70) trailParticles.shift();
+  }
+  window.addEventListener('mousemove', e=> addTrail(e.clientX, e.clientY));
+  window.addEventListener('touchmove', e=>{ if(e.touches[0]) addTrail(e.touches[0].clientX, e.touches[0].clientY); }, {passive:true});
+
+  function loopTrail(){
+    trailCtx.clearRect(0,0,tW,tH);
+    trailParticles.forEach(p=>{
+      p.x += p.vx; p.y += p.vy; p.life -= 0.025;
+      drawHeartShape(trailCtx, p.x, p.y, p.size*p.life, Math.max(p.life,0)*0.7, '#ff5d8f');
+    });
+    trailParticles = trailParticles.filter(p=> p.life > 0);
+    requestAnimationFrame(loopTrail);
+  }
+  loopTrail();
+
+  /* ---------------- confetti (finale) ---------------- */
+  const confettiCanvas = document.getElementById('confetti');
+  const confettiCtx = confettiCanvas.getContext('2d');
+  let cW, cH;
+  function resizeConfetti(){ cW = confettiCanvas.width = window.innerWidth; cH = confettiCanvas.height = window.innerHeight; }
+  window.addEventListener('resize', resizeConfetti);
+  resizeConfetti();
+
+  let confettiParticles = [];
+  let confettiActive = false;
+  const confettiColors = ['#ff5d8f','#c9a3f0','#ffb6d5','#9d6ede','#ff9fc0'];
+  function burstConfetti(){
+    for(let i=0;i<40;i++){
+      confettiParticles.push({
+        x: cW/2 + (Math.random()-0.5)*80,
+        y: cH*0.4,
+        vx:(Math.random()-0.5)*6,
+        vy:-4-Math.random()*4,
+        size:8+Math.random()*10,
+        life:1,
+        color:confettiColors[Math.floor(Math.random()*confettiColors.length)]
+      });
+    }
+  }
+  function loopConfetti(){
+    confettiCtx.clearRect(0,0,cW,cH);
+    if(confettiActive){
+      confettiParticles.forEach(p=>{
+        p.vy += 0.12; p.x += p.vx; p.y += p.vy; p.life -= 0.008;
+        drawHeartShape(confettiCtx, p.x, p.y, p.size, Math.max(p.life,0), p.color);
+      });
+      confettiParticles = confettiParticles.filter(p=> p.life > 0 && p.y < cH+40);
+    }
+    requestAnimationFrame(loopConfetti);
+  }
+  loopConfetti();
+
+  /* =========================================================
+     Scene 1 -> 開始
+  ========================================================= */
+  document.getElementById('btnStart').addEventListener('click', ()=>{
+    showScene('scene-quiz');
+    startQuiz();
+  });
+
+  /* =========================================================
+     Scene 2 -> 心動選擇小測驗
+  ========================================================= */
+  const quizQuestions = [
+    { q:'我們最常一起做的事情是?', opts:['聊天聊到超晚','一起耍廢躺平','鬥嘴鬥到笑出來','傳梗圖給對方'] },
+    { q:'如果現在能送對方一個東西,你會選?', opts:['一個大抱抱','宵夜一份','親親一個','聽你講廢話的時間'] },
+    { q:'此刻最想跟對方說的一句話?', opts:['想你了','辛苦了','你最棒了','抱我一下'] }
+  ];
+  const quizReplies = () => [
+    `這就是${meFixed}喜歡${sheFixed}的原因 ❤`,
+    `答對了,${sheFixed}永遠是最棒的 ❤`,
+    `${meFixed}覺得妳選什麼都對 ❤`,
+    `這種小事${meFixed}都記得 ❤`
+  ];
+
+  let quizIndex = 0;
+  const quizQEl = document.getElementById('quizQ');
+  const quizOptsEl = document.getElementById('quizOpts');
+  const quizReplyEl = document.getElementById('quizReply');
+  let quizTimer = null;
+
+  function startQuiz(){
+    quizIndex = 0;
+    renderQuiz();
+  }
+
+  function renderQuiz(){
+    quizReplyEl.classList.remove('show');
+    quizReplyEl.textContent = '';
+    const item = quizQuestions[quizIndex];
+    quizQEl.textContent = `第 ${quizIndex+1} 題 · ${item.q}`;
+    quizOptsEl.innerHTML = '';
+    item.opts.forEach(opt=>{
+      const btn = document.createElement('button');
+      btn.className = 'quiz-opt';
+      btn.textContent = opt;
+      btn.addEventListener('click', ()=> pickQuizOption(btn));
+      quizOptsEl.appendChild(btn);
+    });
+  }
+
+  function pickQuizOption(btn){
+    if(quizTimer) return;
+    [...quizOptsEl.children].forEach(b=> b.disabled = true);
+    btn.classList.add('picked');
+    const replies = quizReplies();
+    quizReplyEl.textContent = replies[Math.floor(Math.random()*replies.length)];
+    requestAnimationFrame(()=> quizReplyEl.classList.add('show'));
+
+    quizTimer = setTimeout(()=>{
+      quizTimer = null;
+      quizIndex++;
+      if(quizIndex < quizQuestions.length){
+        renderQuiz();
+      } else {
+        showScene('scene-catch');
+        startCatch();
+      }
+    }, 1500);
+  }
+
+  /* =========================================================
+     Scene 3 -> 接愛心
+  ========================================================= */
+  const catchArea = document.getElementById('catchArea');
+  const meterFill = document.getElementById('meterFill');
+  const catchLabel = document.getElementById('catchLabel');
+  let catchScore = 0;
+  let catchSpawnTimer = null;
+  let catchActive = false;
+
+  function startCatch(){
+    catchScore = 0;
+    catchActive = true;
+    updateCatchLabel();
+    document.querySelectorAll('.catch-heart').forEach(h=>h.remove());
+    if(catchSpawnTimer) clearInterval(catchSpawnTimer);
+    catchSpawnTimer = setInterval(spawnCatchHeart, 480);
+  }
+
+  function updateCatchLabel(){
+    catchLabel.innerHTML = `接住 <b>${catchScore}</b> / <b>${CATCH_TARGET}</b> 顆心`;
+    meterFill.style.width = Math.min(100, (catchScore/CATCH_TARGET)*100) + '%';
+  }
+
+  function spawnCatchHeart(){
+    if(!catchActive) return;
+    const el = document.createElement('div');
+    el.className = 'catch-heart';
+    el.textContent = '❤';
+    const x = 6 + Math.random()*88;
+    const size = 22 + Math.random()*16;
+    el.style.left = x + 'vw';
+    el.style.top = '-40px';
+    el.style.fontSize = size + 'px';
+    catchArea.appendChild(el);
+
+    const duration = 4200 + Math.random()*2600;
+    const drift = (Math.random()-0.5) * 60;
+    const start = performance.now();
+    const areaH = catchArea.clientHeight;
+
+    function animate(now){
+      if(!el.parentNode) return;
+      const p = Math.min((now - start)/duration, 1);
+      el.style.transform = `translate(${drift*p}px, ${p*(areaH+80)}px) rotate(${p*15}deg)`;
+      if(p < 1){
+        requestAnimationFrame(animate);
+      } else {
+        el.remove();
+      }
+    }
+    requestAnimationFrame(animate);
+
+    el.addEventListener('click', ()=>{
+      if(!el.parentNode || !catchActive) return;
+      catchScore++;
+      updateCatchLabel();
+      el.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+      el.style.transform += ' scale(1.6)';
+      el.style.opacity = '0';
+      setTimeout(()=> el.remove(), 200);
+
+      if(catchScore >= CATCH_TARGET){
+        finishCatch();
+      }
+    });
+  }
+
+  function finishCatch(){
+    catchActive = false;
+    clearInterval(catchSpawnTimer);
+    setTimeout(()=>{
+      document.querySelectorAll('.catch-heart').forEach(h=>h.remove());
+      showScene('scene-match');
+      startMatch();
+    }, 900);
+  }
+
+  /* =========================================================
+     Scene 4 -> 翻牌配對
+  ========================================================= */
+  const matchGrid = document.getElementById('matchGrid');
+  const matchStatus = document.getElementById('matchStatus');
+  const heartColors = ['❤','🧡','💛','💚','💙','💜'];
+  let flippedCards = [];
+  let matchedCount = 0;
+  let matchLock = false;
+
+  function shuffle(arr){
+    const a = [...arr];
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  function startMatch(){
+    matchedCount = 0;
+    flippedCards = [];
+    matchLock = false;
+    matchStatus.textContent = '配對 0 / 6';
+    const deck = shuffle([...heartColors, ...heartColors]);
+    matchGrid.innerHTML = '';
+    deck.forEach(symbol=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.dataset.symbol = symbol;
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="card-face card-front"></div>
+          <div class="card-face card-back">${symbol}</div>
+        </div>`;
+      card.addEventListener('click', ()=> flipCard(card));
+      matchGrid.appendChild(card);
+    });
+  }
+
+  function flipCard(card){
+    if(matchLock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+    card.classList.add('flipped');
+    flippedCards.push(card);
+
+    if(flippedCards.length === 2){
+      matchLock = true;
+      const [a,b] = flippedCards;
+      if(a.dataset.symbol === b.dataset.symbol){
+        a.classList.add('matched');
+        b.classList.add('matched');
+        matchedCount++;
+        matchStatus.textContent = `配對 ${matchedCount} / 6`;
+        flippedCards = [];
+        matchLock = false;
+        if(matchedCount === 6){
+          setTimeout(()=>{
+            showScene('scene-letter');
+            startLetter();
+          }, 700);
+        }
+      } else {
+        setTimeout(()=>{
+          a.classList.remove('flipped');
+          b.classList.remove('flipped');
+          flippedCards = [];
+          matchLock = false;
+        }, 750);
+      }
+    }
+  }
+
+  /* =========================================================
+     Scene 5 -> 告白信
+  ========================================================= */
+  const letterDaysEl = document.getElementById('letterDays');
+  const letterTextEl = document.getElementById('letterText');
+  const finalHeartEl = document.getElementById('finalHeart');
+  const finalTitleEl = document.getElementById('finalTitle');
+  const btnReplay = document.getElementById('btnReplay');
+
+  function letterContent(){
+    return `${sheFixed}:
+
+謝謝妳願意陪${meFixed}走到這裡,
+這一路上吵吵鬧鬧,但每一次回頭,
+妳都還在。
+
+不管今天是普通的一天,
+還是特別的日子,
+${meFixed}都想讓妳知道——
+被妳喜歡,是${meFixed}最幸運的事。
+
+以後也要繼續黏在一起喔。`;
+  }
+
+  function startLetter(){
+    const start = new Date(START_DATE);
+    const now = new Date();
+    const days = Math.max(0, Math.floor((now - start) / 86400000));
+    letterDaysEl.textContent = isNaN(days) ? '' : `我們已經在一起 ${days} 天了`;
+
+    finalHeartEl.classList.remove('show');
+    finalTitleEl.classList.remove('show');
+    btnReplay.style.display = 'none';
+    letterTextEl.innerHTML = '';
+
+    const text = letterContent();
+    let i = 0;
+    const caret = document.createElement('span');
+    caret.className = 'letter-caret';
+    caret.textContent = '|';
+
+    function typeNext(){
+      if(i <= text.length){
+        letterTextEl.textContent = text.slice(0, i);
+        letterTextEl.appendChild(caret);
+        i++;
+        setTimeout(typeNext, 32);
+      } else {
+        caret.remove();
+        finishLetter();
+      }
+    }
+    typeNext();
+  }
+
+  function finishLetter(){
+    setTimeout(()=>{
+      finalHeartEl.classList.add('show');
+      finalTitleEl.textContent = `${meFixed} ❤ ${sheFixed}`;
+      finalTitleEl.classList.add('show');
+      btnReplay.style.display = 'inline-block';
+      confettiActive = true;
+      burstConfetti();
+      setTimeout(burstConfetti, 500);
+      setTimeout(burstConfetti, 1000);
+    }, 400);
+  }
+
+  btnReplay.addEventListener('click', ()=>{
+    confettiActive = false;
+    confettiParticles = [];
+    if(quizTimer){ clearTimeout(quizTimer); quizTimer = null; }
+    if(catchSpawnTimer){ clearInterval(catchSpawnTimer); catchSpawnTimer = null; }
+    catchActive = false;
+    showScene('scene-start');
+  });
+
 })();
 </script>
 
